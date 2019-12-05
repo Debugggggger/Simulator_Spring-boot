@@ -11,14 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static com.drimsys.simulator.util.File.XML_PATH;
 import static com.drimsys.simulator.util.Message.*;
 
 @RestController
 @RequestMapping("/api/eq")
 public class EqAPI{
     @RequestMapping(method = RequestMethod.GET)
-    public JSONResult eqNameGET(HttpServletRequest servletRequest) {
-        List<String> fileName = File.getFiles(File.getXMLPath(servletRequest));
+    public JSONResult eqNameGET() {
+        List<String> fileName = File.getFiles(XML_PATH);
 
         if(fileName.isEmpty()) {
             return new JSONResult(404, NOT_FOUND, null);
@@ -28,8 +29,8 @@ public class EqAPI{
     }
 
     @RequestMapping(value = "test", method =  RequestMethod.GET)
-    public String dsa(HttpServletRequest servletRequest) {
-        Eq eq = File.load("testPump1123", File.getXMLPath(servletRequest));
+    public String dsa() {
+        Eq eq = File.load("testPump1123", XML_PATH);
         return Checksum.sum(eq.getMessageFrames().get(COMMAND_TYPE + "asdasdasd"), "stx", "etx");
     }
 

@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.drimsys.simulator.util.File.XML_PATH;
 import static com.drimsys.simulator.util.Message.*;
 
 @RestController
 @RequestMapping("/api/scenario/{eqName}")
 public class ScenarioAPI{
     @RequestMapping(method = RequestMethod.GET)
-    public JSONResult messageFrameGET(@PathVariable String eqName,
-                                      HttpServletRequest servletRequest) {
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+    public JSONResult messageFrameGET(@PathVariable String eqName) {
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq != null) {
             if(eq.getScenarios() == null) return new JSONResult(404, NOT_FOUND, null);
@@ -35,10 +35,9 @@ public class ScenarioAPI{
     // TODO : POST, PUT 분리
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     public JSONResult messageFramePOSTandPUT(@PathVariable String eqName,
-                                             @RequestBody String request,
-                                             HttpServletRequest servletRequest) {
+                                             @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq == null) return new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -54,15 +53,14 @@ public class ScenarioAPI{
         scenarioMap.put(scenario.getName(), scenario);
         eq.setScenarios(scenarioMap);
 
-        return JSONUtil.returnResult(File.save(eqName, eq, File.getXMLPath(servletRequest)));
+        return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     public JSONResult messageFrameDELETE(@PathVariable String eqName,
-                                         @RequestBody String request,
-                                         HttpServletRequest servletRequest) {
+                                         @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq == null) new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -71,7 +69,7 @@ public class ScenarioAPI{
         }
 
         if(eq.getScenarios().remove(request) != null) {
-            return JSONUtil.returnResult(File.save(eqName, eq, File.getXMLPath(servletRequest)));
+            return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
         } else {
             return new JSONResult(404, FILE_NOT_FOUND, null);
         }

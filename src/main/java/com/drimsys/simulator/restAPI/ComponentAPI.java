@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
+import static com.drimsys.simulator.util.File.XML_PATH;
 import static com.drimsys.simulator.util.Message.*;
 
 /**
@@ -31,9 +32,8 @@ public class ComponentAPI {
      * @return 처리 결과
      */
     @RequestMapping(method = RequestMethod.GET)
-    public JSONResult componentGET(@PathVariable String eqName,
-                                   HttpServletRequest servletRequest) {
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+    public JSONResult componentGET(@PathVariable String eqName) {
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq == null) return new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -55,10 +55,9 @@ public class ComponentAPI {
      */
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     public JSONResult componentPOST(@PathVariable String eqName,
-                                    @RequestBody String request,
-                                    HttpServletRequest servletRequest) {
+                                    @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq == null) new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -71,7 +70,7 @@ public class ComponentAPI {
         if(eq.getComponents() == null) eq.setComponents(new HashMap<>());
         eq.getComponents().put(component.getName(), component);
 
-        return JSONUtil.returnResult(File.save(eqName, eq, File.getXMLPath(servletRequest)));
+        return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
     }
 
     /**
@@ -83,10 +82,9 @@ public class ComponentAPI {
      */
     @RequestMapping(method = RequestMethod.DELETE)
     public JSONResult componentDELETE(@PathVariable String eqName,
-                                      @RequestBody String request,
-                                      HttpServletRequest servletRequest) {
+                                      @RequestBody String request) {
         request = Convert.decodeURL(request).replaceAll("\"", "");
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq == null) new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -96,6 +94,6 @@ public class ComponentAPI {
 
         eq.getComponents().remove(request);
 
-        return JSONUtil.returnResult(File.save(eqName, eq, File.getXMLPath(servletRequest)));
+        return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
     }
 }

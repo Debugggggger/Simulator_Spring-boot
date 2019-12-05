@@ -14,6 +14,8 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import static com.drimsys.simulator.util.File.XML_PATH;
+
 @RestController
 @RequestMapping(value = "/api/file")
 public class FileAPI{
@@ -56,22 +58,20 @@ public class FileAPI{
     }
 
     @RequestMapping(value = "/import", method = RequestMethod.POST)
-    public JSONResult importPOST(@RequestBody String request,
-                                 HttpServletRequest servletRequest) {
+    public JSONResult importPOST(@RequestBody String request) {
         request = Convert.decodeURL(request);
 
-        String path = File.getXMLPath(servletRequest);
+        String path = XML_PATH;
         String name = "upload_" + System.currentTimeMillis();
 
         return unmarshal(name, path, request);
     }
 
     @RequestMapping(value = "/export", method = RequestMethod.POST)
-    public JSONResult exportPOST(@RequestBody String request,
-                                 HttpServletRequest servletRequest) {
+    public JSONResult exportPOST(@RequestBody String request) {
         request = Convert.decodeURL(request);
 
-        String path = File.getXMLPath(servletRequest);
+        String path = XML_PATH;
         String name = request;
 
         // 장비명 중복 체크

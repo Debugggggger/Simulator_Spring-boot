@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.drimsys.simulator.util.File.XML_PATH;
 import static com.drimsys.simulator.util.Message.*;
 
 /**
@@ -31,12 +32,12 @@ public class EqSettingAPI {
      * @return 처리결과
      */
     @RequestMapping(method = RequestMethod.GET)
-    public JSONResult eqSettingGET(HttpServletRequest request) {
+    public JSONResult eqSettingGET() {
         List<EqSetting> eqSettings = new LinkedList<>();
-        List<String> files = File.getFiles(File.getXMLPath(request));
+        List<String> files = File.getFiles(XML_PATH);
 
         for(String name : files) {
-            eqSettings.add(File.load(name, File.getXMLPath(request)).getEqSetting());
+            eqSettings.add(File.load(name, XML_PATH).getEqSetting());
         }
 
         if(eqSettings.isEmpty()) {
@@ -54,8 +55,7 @@ public class EqSettingAPI {
      */
     @RequestMapping(value = "/{eqName}",  method = RequestMethod.POST)
     public JSONResult eqSettingPOST(@PathVariable String eqName,
-                                    @RequestBody String request,
-                                    HttpServletRequest servletRequest) {
+                                    @RequestBody String request) {
         request = Convert.decodeURL(request);
 
         Eq eq = new Eq();
@@ -67,20 +67,19 @@ public class EqSettingAPI {
         }
 
         if(!eqSetting.getTargetEq().equals("")) {
-            eq = File.load(eqSetting.getTargetEq(), File.getXMLPath(servletRequest));
+            eq = File.load(eqSetting.getTargetEq(), XML_PATH);
         }
 
         eq.setEqSetting(eqSetting);
 
-        return JSONUtil.returnResult(File.save(eqSetting.getName(), eq, File.getXMLPath(servletRequest)));
+        return JSONUtil.returnResult(File.save(eqSetting.getName(), eq, XML_PATH));
     }
 
     @RequestMapping(value = "/{eqName}", method = RequestMethod.PUT)
     public JSONResult eqSettingPUT(@PathVariable String eqName,
-                                   @RequestBody String request,
-                                   HttpServletRequest servletRequest) {
+                                   @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq == null) return new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -92,14 +91,13 @@ public class EqSettingAPI {
 
         eq.setEqSetting(eqSetting);
 
-        return JSONUtil.returnResult(File.save(eqSetting.getName(), eq, File.getXMLPath(servletRequest)));
+        return JSONUtil.returnResult(File.save(eqSetting.getName(), eq, XML_PATH));
     }
 
     // TODO : 장비 세팅 삭제하면 파일 삭제 해야함
     @RequestMapping(value = "/{eqName}", method = RequestMethod.DELETE)
     public JSONResult eqSettingDELETE(@PathVariable String eqName,
-                                      @RequestBody String request,
-                                      HttpServletRequest servletRequest) {
-        return JSONUtil.returnResult(File.remove(eqName, File.getXMLPath(servletRequest)));
+                                      @RequestBody String request) {
+        return JSONUtil.returnResult(File.remove(eqName, XML_PATH));
     }
 }

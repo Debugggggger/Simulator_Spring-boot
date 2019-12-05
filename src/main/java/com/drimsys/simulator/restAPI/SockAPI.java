@@ -9,6 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.drimsys.simulator.util.File.XML_PATH;
+
 @RestController
 @RequestMapping("/api/sock")
 public class SockAPI{
@@ -21,8 +23,8 @@ public class SockAPI{
     }
 
     @RequestMapping(value = "/path", method = RequestMethod.GET)
-    public String pathGET(HttpServletRequest servletRequest) {
-        return Convert.encodeURL(File.getXMLPath(servletRequest));
+    public String pathGET() {
+        return Convert.encodeURL(XML_PATH);
     }
 
 }

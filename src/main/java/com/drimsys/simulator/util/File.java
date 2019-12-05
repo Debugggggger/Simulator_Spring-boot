@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 public class File {
-    public static final String XML_PATH = "/WEB-INF/resources";
+    public static String XML_PATH = "resource/xml/";
 
     private static Components initComponents() {
         List<Component> init = new LinkedList<>();
@@ -91,11 +91,21 @@ public class File {
     }
 
     public static Eq load(String name, String path) {
+        java.io.File file = new java.io.File(path);
+
+        if(!file.exists()) {
+            try {
+                file.mkdir();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
         String fileName = name + ".xml";
 
         JAXBContext jaxbContext;
 
-        java.io.File file = new java.io.File(path + fileName);
+        file = new java.io.File(path + fileName);
         try {
             jaxbContext = JAXBContext.newInstance(EqXml.class);
 
@@ -126,9 +136,5 @@ public class File {
         }
 
         return false;
-    }
-
-    public static String getXMLPath(HttpServletRequest request) {
-        return request.getSession().getServletContext().getRealPath(XML_PATH) + "/";
     }
 }

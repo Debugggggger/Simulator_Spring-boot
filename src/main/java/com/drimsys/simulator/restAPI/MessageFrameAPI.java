@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.drimsys.simulator.util.File.XML_PATH;
 import static com.drimsys.simulator.util.Message.*;
 
 /**
@@ -31,9 +32,8 @@ import static com.drimsys.simulator.util.Message.*;
 @RequestMapping("/api/messageFrame/{eqName}")
 public class MessageFrameAPI {
     @RequestMapping(method = RequestMethod.GET)
-    public JSONResult messageFrameGET(@PathVariable String eqName,
-                                      HttpServletRequest servletRequest) {
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+    public JSONResult messageFrameGET(@PathVariable String eqName) {
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq != null) {
             if(eq.getMessageFrames().size() != 0) {
@@ -68,10 +68,9 @@ public class MessageFrameAPI {
     // TODO : POST, PUT 분리
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     public JSONResult messageFramePOSTandPUT(@PathVariable String eqName,
-                                             @RequestBody String request,
-                                             HttpServletRequest servletRequest) {
+                                             @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq == null) return new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -91,15 +90,14 @@ public class MessageFrameAPI {
             eq.getMessageFrames().put(messageFrame.getName(), messageFrame);
         }
 
-        return JSONUtil.returnResult(File.save(eqName, eq, File.getXMLPath(servletRequest)));
+        return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     public JSONResult messageFrameDELETE(@PathVariable String eqName,
-                                         @RequestBody String request,
-                                         HttpServletRequest servletRequest) {
+                                         @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, File.getXMLPath(servletRequest));
+        Eq eq = File.load(eqName, XML_PATH);
 
         if(eq == null) new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -121,7 +119,7 @@ public class MessageFrameAPI {
         }
 
         if(eq.getMessageFrames().remove(frameName) != null) {
-            return JSONUtil.returnResult(File.save(eqName, eq, File.getXMLPath(servletRequest)));
+            return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
         } else {
             return new JSONResult(404, FILE_NOT_FOUND, null);
         }
