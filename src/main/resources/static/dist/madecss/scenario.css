@@ -1,0 +1,133 @@
+.contextmenu {
+	display: none;
+	position: absolute;
+	width: 200px;
+	margin: 0;
+	padding: 0;
+	background: #FFFFFF;
+	border-radius: 5px;
+	list-style: none;
+	box-shadow: 0 15px 35px rgba(50, 50, 90, 0.1), 0 5px 15px
+		rgba(0, 0, 0, 0.07);
+	overflow: hidden;
+	z-index: 999999;
+}
+
+.contextmenu li {
+	border-left: 3px solid transparent;
+	transition: ease .2s;
+}
+
+.contextmenu li a {
+	display: block;
+	padding: 10px;
+	color: #B0BEC5;
+	text-decoration: none;
+	transition: ease .2s;
+}
+
+.contextmenu li:hover {
+	background: #CE93D8;
+	border-left: 3px solid #9C27B0;
+}
+
+.contextmenu li:hover a {
+	color: #FFFFFF;
+}
+
+.card {
+	margin-top: 1rem !important;
+}
+
+.timerH, .timerE {
+	width: 100%;
+	height: 100%;
+	border: solid 1px gray;
+}
+
+.timer {
+	width: 100%;
+	height: 50%;
+	border: solid 1px gray;
+}
+
+.host_l {
+	height: 100%;
+	border-right: 1px solid black;
+}
+
+.eq_1 {
+	height: 100%;
+	border-left: 1px solid black;
+}
+
+.c_name {
+	text-align: center;
+	height: 30%;
+}
+
+hr {
+	width: 100%;
+}
+
+#scenarioList {
+	overflow: auto;
+	padding: 5%;
+}
+
+#commandList {
+	overflow: auto;
+	padding: 5%;
+}
+
+#buttonZone {
+	margin-top: 5%;
+}
+
+#responseList {
+	overflow: auto;
+	padding: 5%;
+}
+
+h3 {
+	text-align: center
+}
+
+#addhosteq {
+	overflow: auto;
+	max-height: 50%;
+}
+
+.line {
+	width: 100%;
+	height: 50px;
+}
+
+.addtimer {
+	height: 40px;
+	width: 100%;
+}
+
+.arrowright {
+	margin-top: 7.5%;
+}
+
+.arrowleft {
+	margin-left: 5px;
+}
+
+#sortable, #unsort {
+	width: 95%;
+	margin-left: 5%;
+}
+
+#unsort {
+	margin-bottom: 5%;
+}
+
+#scenSortBtn, #cmdSortBtn, #rspSortBtn {
+	float: right;
+}
+#scenariotest {
+	height : 100%;
+}

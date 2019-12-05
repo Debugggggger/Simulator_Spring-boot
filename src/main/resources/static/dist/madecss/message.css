@@ -1,0 +1,137 @@
+.contextmenu {
+  display: none;
+  position: absolute;
+  width: 200px;
+  margin: 0;
+  padding: 0;
+  background: #FFFFFF;
+  border-radius: 5px;
+  list-style: none;
+  box-shadow:
+    0 15px 35px rgba(50,50,90,0.1),
+    0 5px 15px rgba(0,0,0,0.07);
+  overflow: hidden;
+  z-index: 999999;
+}
+
+.contextmenu li {
+  border-left: 3px solid transparent;
+  transition: ease .2s;
+}
+
+.contextmenu li a {
+  display: block;
+  padding: 10px;
+  color: #B0BEC5;
+  text-decoration: none;
+  transition: ease .2s;
+}
+
+.contextmenu li:hover {
+  background: #CE93D8;
+  border-left: 3px solid #007bff;
+}
+
+.contextmenu li:hover a {
+  color: #FFFFFF;
+}
+
+/* .right-div>.card {
+   height: 46%;
+} */
+
+.center-div>.card {
+   height: 95.5%;
+}
+
+.component-div {
+   height: 95.5%;
+   overflow: auto;
+}
+.command-div{
+	height: 45%;
+}
+.response-div {
+	height: 46%;
+}
+.msgList-div {
+   height: 47%;
+}
+.card {
+   margin-top: 1rem!important;
+}
+#cmpSortBtn{
+	float:right;
+	margin: 0 3px 0 0;
+}
+#plusBtn {
+   float:right;
+}
+#cmdSortBtn {
+   float:right;
+}
+#rspSortBtn {
+   float:right;
+}
+.cmp { 
+   width: 80px;
+   height: 25px;
+   margin: 0 5px 5px 0;
+   border: solid 1px blue;
+   background-color: skyblue;
+}
+#msgFrame {
+   border: 1px solid #dee0e3;
+   height:20%;
+   overflow: auto;
+}
+#msgFrame-div {
+	margin-top: 1%;
+   border: 1px solid #dee0e3;
+   height:75%;
+}
+#msgFrameTable-div {
+   width:50%;
+   height:100%;
+   float:left;
+}
+#msgFrameCS-div {
+   width:50%;
+   height:100%;
+   display:inline-block; 
+}
+#cmpList {
+   overflow: auto;
+}
+#madeMsg {
+   height:93%;
+   margin-top: 1%;
+}
+input:focus, textarea:focus, select:focus {
+   outline: none; 
+}
+#cmpTable input, #cmpTable select {
+   width:100%; 
+   border: 0;
+}
+#msgTable input, #msgTable select {
+   width:100%; 
+   border: 0;
+}
+.msgEle {
+    margin: 0 5px 5px 0;
+}
+#tabCmd {
+	overflow: auto;
+	height : 70%;
+}
+#tabRsp {
+	overflow: auto;
+	height : 60%;
+}
+/* body::-webkit-scrollbar { 	div 스크롤은 가능하지만 안보이게
+    display: none; 
+} */
+div::-webkit-scrollbar { 	/* div 스크롤은 가능하지만 안보이게 */
+    display: none; 
+}
