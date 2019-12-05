@@ -1,6 +1,6 @@
 
 .draw {
-    height: 40%;
+    height: 30%;
     width: 100%;
     border: solid 1px brown;
     overflow: auto;
@@ -53,6 +53,7 @@ ul.tab_head_list {
     border-bottom: 1px solid #999;
     border-left: 1px solid #999;
     width: 100%;
+    height:auto;
 }
 
 ul.tab_head_list li {
@@ -96,22 +97,13 @@ html ul.tab_head_list li.active, html ul.tab_head_list li.active a:hover {
 
 /* scradio draw */
 .timerH, .timerE {
-    width: 100%;
-    height: 100%;
-}
-
-.timerH {
-    text-align: right;
-}
-
-.timerE {
-    text-align: left;
+	width: 100%;
+	height: 50%;
 }
 
 .timer {
-    width: 100%;
-    height: 50%;
-
+	width: 100%;
+	height: 25px;
 }
 .transaction left {
     margin-left: 20%;
@@ -157,8 +149,10 @@ h3 {
     width: 100%;
 }
 
-.arrowright {
-    margin: auto;
+.arrowright, .arrowleft {
+	width : 16px;
+	text-align: center;
+	margin-top: 7.5%;
 }
 
 #sortable, #unsort {

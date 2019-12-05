@@ -242,19 +242,24 @@
             if (radio_check() == "client") {
                 $('.timerH').droppable({
                 accept : ".timer", // 드롭시킬 대상 요소
-                active : function(event, ui) {
-                    $(this).css('border', 'solid 1px blue');
-                    //$(this).attr("style = 'border: solid 1px gray;'");
+                activeClass : function (){
+                    $(this).css('border', 'solid 1px gray');
                 },
                 drop : function(event, ui) {
                     if ($(this).find(".timer").length == 0) {
                         $(this).append("<input type='number' class = 'timer' placeholder='timer' max='2147483648 '>");
                     }
+                },
+                deactivate:function(e, ui){
+                    $(this).css('border','');
                 }
                 });
             } else {
                 $('.timerE').droppable({
                 accept : ".timer", // 드롭시킬 대상 요소
+                activeClass : function (){
+                    $(this).css('border', 'solid 1px gray');
+                },
                 active : function(event, ui) {
 
                 },
@@ -262,6 +267,9 @@
                     if ($(this).find(".timer").length == 0) {
                         $(this).append("<input type='number' class = 'timer' placeholder='timer' max='2147483648 '>");
                     }
+                },
+                deactivate:function(e, ui){
+                    $(this).css('border','');
                 }
                 });
             }
@@ -526,18 +534,44 @@
             timerE = "<div class='timerE' style='display: block'/>";
         }
         if (lineNumber == 0) {
-            var add = "<div class='line row addtimer' id = 'line"+ lineNumber +"'>" + "<div class='col-md-2'>" + timerH + "</div>" + "<div class='col-md-1'><div class=\"host_l\" ></div></div>" + "<div class='col-md-6'/>" + "<div class='col-md-1'><div class=\"eq_1\"></div></div>" + "<div class='col-md-2'>" + timerE + "</div>" + "</div>";
+            var add = "<div class='line row addtimer' id = 'line0'>"
+            + "<div class='col-md-2'>" + timerH + "</div>" 
+            + "<div class='col-md-1'><div class='host_l' ></div></div>" 
+            + "<div class='col-md-6'/>" 
+            + "<div class='col-md-1'><div class='eq_1'></div></div>" 
+            + "<div class='col-md-2'>" + timerE + "</div>" 
+            + "</div>";
             $(add).appendTo("#unsort");
         }
         lineNumber++;
         if (side == 'command') {
             timerE = "";
-            arrow = "<div class='col-md-6' style='padding: 0px;'>" + "<div class='row' style='padding: 0px;'>" + "<div class = 'col-md-10' style='padding: 0px;'>" + "<div class='c_name' style='padding: 0px;'>" + lineName + "</div>" + "<hr/>"+"</div>" + "<div class='col-md-1 arrowright'style='padding: 0px;' >▷</div>" + "</div>" + "</div>";
+            arrow = "<div class='col-md-6' style='padding: 0px;'>" 
+            + "<div class='row' style='padding: 0px;'>" 
+            + "<div class = 'col-md-11' style='padding: 0px;'>" 
+            + "<div class='c_name' style='padding: 0px;'>" + lineName + "</div>" 
+            + "<hr/>"+"</div>" 
+            + "<div class='arrowright'style='padding: 0px;' >▷</div>" 
+            + "</div>"
+            + "</div>";
         } else {
             timerH = "";
-			arrow = "<div class='col-md-6' style='padding: 0px;'>" + "<div class='row' style='padding: 0px;'>" + "<div class='col-md-1 arrowleft' style='padding: 0px;'>◁</div>" + "<div class = 'col-md-10' style='padding: 0px;'>" + "<div class='c_name' style='padding: 0px;'>" + lineName + "</div>" + "<hr/>"+"</div>" + "</div>" + "</div>";
+			arrow = "<div class='col-md-6' style='padding: 0px;'>" 
+			+ "<div class='row' style='padding: 0px;'>" 
+			+ "<div class='arrowleft' style='padding: 0px;'>◁</div>" 
+			+ "<div class = 'col-md-11' style='padding: 0px;'>" 
+			+ "<div class='c_name' style='padding: 0px;'>" + lineName + "</div>" 
+			+ "<hr/>"+"</div>" 
+			+ "</div>"
+			+ "</div>";
         }
-        var text = "<div class='line row' id = 'line" + lineNumber + "' onmousedown=\"clickedline(this.id)\"' >" + "<div class='col-md-2' >" + timerH + "</div>" + "<div class='col-md-1'>" + "<div class=\"host_l\" >" + "</div>" + "</div>" + arrow + "<div class='col-md-1'>" + "<div class=\"eq_1\">" + "</div>" + "</div>" + "<div class='col-md-2'>" + timerE + "</div>" + "</div>";
+        var text = "<div class='line row' id = 'line" + lineNumber + "' onmousedown=\"clickedline(this.id)\"' >" 
+        + "<div class='col-md-2' >" + timerH + "</div>" 
+        + "<div class='col-md-1'><div class='host_l' ></div></div>" 
+        + arrow 
+        + "<div class='col-md-1'><div class='eq_1'></div></div>" 
+        + "<div class='col-md-2'>" + timerE + "</div>" 
+        + "</div>";
         $(text).appendTo("#sortable");
     }
 

@@ -86,81 +86,35 @@
 
 
 <script type="text/javascript">
-    var _browserState = 'unknown';
-
-    (function checkBrowser(){
-        var agent = navigator.userAgent.toLowerCase();
-        if(agent.indexOf("chrome")!=-1){_browserState="Chrome";}
-        else if(agent.indexOf("safari")!=-1){_browserState="safari";}
-        else if(agent.indexOf("firefox")!=-1){_browserState="firefox";}
-        else if(agent.indexOf("msie")!=-1 || agent.indexOf('trident')!=-1){_browserState="IE"}
-        for(let i=0;i<5;i++){ console.warn("connected Browser is "+_browserState);}
-    })();
-    
-    // Extension Download reProduction Code
-    function _downloadEx(filename,contents){
-        if(_browserState.toLowerCase() ==='chrome'){
-            var element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(contents));
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
-        //not in Chrome
-        else{
-            var a = document.createElement("a"),
-                file = new Blob([contents], { type: "text/plain;charset=utf-8" });
-
-            if (window.navigator.msSaveOrOpenBlob) // IE10+
-                window.navigator.msSaveOrOpenBlob(file, filename);
-            else { // Others
-                var url = URL.createObjectURL(file);
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-
-                a.click();
-                setTimeout(function () {
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                }, 0);
-            }
-        }
+    function openTextFile() {
+        var input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".xml"; // 확장자가 xxx, yyy 일때, ".xxx, .yyy"
+        input.onchange = function (event) {
+            processFile(event.target.files[0]);
+        };
+        input.click();
     }
-
-    $(document).ready(function () {
-        $("#btnExport").click(function () {
-            var response = ajaxFile("pump1", "export");
-	        
-            switch (response.code) {
-	            case 200:
-                    _downloadEx("text.xml",response.data);
-	                break;
-	            case 404:
-	                alert(response.message);
-	                break;
-	            case 500:
-                    alert(response.message);
-	                break;
-	            default:
-                    alert("Export Error");
-	                break;
-            }
-        })
-    });
-    
+    function processFile(file) {
+        var reader = new FileReader();
+        var result;
+        reader.readAsText(file, "utf-8");
+        reader.onload = function () {
+            result = reader.result;
+            alert(ajaxFile(result, "import").message);
+            location.reload();
+        };
+    }
 
 </script>
 
 </head>
 <body>
-
+<button onclick="openTextFile()">open</button>
 <%--&lt;%&ndash;//action="/api/file/import"&ndash;%&gt;--%>
 <%--<form enctype="multipart/form-data">--%>
 	<%--<input type="file" multiple="multiple" name="filename[]">--%>
 <%--</form>--%>
-<button id="btnExport">Export</button>
+<%--<button id="btnExport">Export</button>--%>
 </body>
 </html>

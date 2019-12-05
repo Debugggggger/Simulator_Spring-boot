@@ -1,0 +1,20 @@
+html, body {
+	background: #f4f6f9 !important;
+	height: 100% !important;
+	overflow: hidden;
+}
+#manualCard {
+	margin: 1%;
+	height: 98%;
+	width: 98%;
+}
+#manualListDiv {
+	height: 85%;
+}
+#manualListTable {
+	height: 100%;
+	width: 100%;
+}
+#manualBtnDiv {
+	border: 1px solid red;
+}

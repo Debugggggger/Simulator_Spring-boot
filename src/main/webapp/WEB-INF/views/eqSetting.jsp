@@ -142,13 +142,13 @@
                 }
             }
 
-            // length에 숫자만 입력
-            $(document).on("keydown", "#CS, #DL, #SB", function(e) {
-                $(this).val($(this).val().replace(/[^0-9]/gi, ''));
-            });
+            // // length에 숫자만 입력
+            // $(document).on("keydown",  #DL, #SB", function(e) {
+            //     $(this).val($(this).val().replace(/[^0-9]/gi, ''));
+            // });
 
             //한글 입력 막기
-            $(document).on("keyup", "#eqN, #EI, #SM,#EC,#BC", function(e) {
+            $(document).on("keyup", "#eqN, #SM,#EC,#BC", function(e) {
                 $(this).val($(this).val().replace(/[^a-zA-Z0-9]/g, ''));
             });
 
@@ -161,11 +161,11 @@
                 $(".eqNamebtn").find('button').css({'background-color': '#f7f7f7', 'color': 'black'});
                 update_eqinfo = true;
                 maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' >" + "</td>" + "</tr>"
-                    + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<input type='text' id='EI'  >" + "</td>" + "</tr>"
+                    + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
                     + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' >" + "</td>" + "</tr>"
-                    + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<input type='number' id='CS'>" + "</td>" + "</tr>"
-                    + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<input type='number'id='DL'>" + "</td>" + "</tr>"
-                    + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<input type='number'id='SB'>" + "</td>" + "</tr>"
+                    + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
+                    + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
+                    + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                     + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                     + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td>" + "<input type='text'id='EC'>" + "</td>" + "</tr>"
                     + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td>" + "<input type='text'id='BC'>" + "</td>" + "  </tr>" + "</tbody>";
@@ -190,31 +190,31 @@
                         alert("이미 존재하는 장비 이름입니다. 다른 이름을 입력해주세요.");
                     }
                     else{
-                        var EI = $("#EI").val();
+                        var EI = $("#EI option:selected").text();
                         var SM = $("#SM").val();
-                        var CS = $("#CS").val();
-                        var DL = $("#DL").val();
-                        var SB = $("#SB").val();
+                        var CS = $("#CS option:selected").val();
+                        var DL = $("#DL option:selected").val();
+                        var SB = $("#SB option").index($("#SB option:selected"));
                         var PR = $("#PR option").index($("#PR option:selected"));
                         var EC = $("#EC").val();
                         var BC = $("#BC").val();
-                        
+
                         var eq = {
                             "name": eqN,
                             "electricalInterface": EI,
                             "synchronizationMethod": SM,
-                            "communicationSpeed": CS,
-                            "dataLength": DL,
-                            "stopBit": SB,
+                            "communicationSpeed": Number(CS),
+                            "dataLength": Number(DL),
+                            "stopBit": SB+1,
                             "parity": PR,
                             "errorControl": EC,
                             "busyControl": BC,
                             "targetEq":targetEq
                         };
+                        console.log(eq);
                         targetEq = '';
                         if (eqinfoCkNull() != false) {
                             if (update_eqinfo == true) {
-                                console.log(eq);
                                 var result = ajaxEqSetting("post", eqN, JSON.stringify(eq));
                                 if (result.code == 200) {
                                     setGlobalValue("Eq : " + eqN, JSON.stringify(eq), 1);
@@ -252,29 +252,33 @@
                 if (clickname == ""||clickname==null) {
                     alert("수정할 장비의 이름을 선택해주세요.");
                 } else {
-                    var eiinfo = $("#eiinfo").text();
+                    var eiinfo = $("#eiinfoSelect option:selected").text();
                     var sminfo = $("#sminfo").text();
-                    var csinfo = $("#csinfo").text();
-                    var dlinfo = $("#dlinfo").text();
-                    var sbinfo = $("#sbinfo").text();
+                    var csinfo = $("#csinfoSelect option:selected").val();
+                    var dlinfo = $("#dlinfoSelect option:selected").val();
+                    var sbinfo = $("#sbinfoSelect option").index($("#sbinfoSelect option:selected"));
                     var prinfo = $("#prinfoSelect option").index($("#prinfoSelect option:selected"));
                     var ecinfo = $("#ecinfo").text();
                     var bcinfo = $("#bcinfo").text();
 
                     $("#eqfirstsetting *").remove();
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN'  value = '" + clickname + "' disabled >" + "</td>" + "</tr>"
-                        + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<input type='text' id='EI' value = '" + eiinfo + "'>" + "</td>" + "</tr>"
+                        + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
                         + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM'  value = '" + sminfo + "'>" + "</td>" + "</tr>"
-                        + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<input type='number' id='CS' value = '" + csinfo + "'>" + "</td>" + "</tr>"
-                        + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<input type='number'id='DL'  value = '" + dlinfo + "'>" + "</td>" + "</tr>"
-                        + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<input type='number'id='SB'  value = '" + sbinfo + "'>" + "</td>" + "</tr>"
+                        + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
+                        + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
+                        + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                         + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                         + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td>" + "<input type='text'id='EC'  value = '" + ecinfo + "'>" + "</td>" + "</tr>"
                         + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td>" + "<input type='text'id='BC'  value = '" + bcinfo + "'>" + "</td>" + "  </tr>" + "</tbody>";
                     $("#eqfirstsetting").append(maintext);
                     // 패리티 선택 만들기
-                    console.log(prinfo);
                     $("#PR option:eq(" + prinfo + ")").attr("selected", "selected");
+                    $("#EI").val(eiinfo).attr("selected", "selected");
+                    $("#DL").val(dlinfo).attr("selected", "selected");
+                    $("#SB option:eq(" + sbinfo + ")").attr("selected", "selected");
+                    $("#CS").val(csinfo).attr("selected", "selected");
+
                 }
                 $("#updateeqsetting").hide();
                 $("#inserteqsetting").show();
@@ -350,28 +354,22 @@
                     $(".eqNamebtn").find('button').css({'background-color': '#f7f7f7', 'color': 'black'});
                     update_eqinfo = true;
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' value="+eqData.name+">" + "</td>" + "</tr>"
-                        + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<input type='text' id='EI' value="+ eqData.electricalInterface + "></td>" + "</tr>"
+                        + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+"</td>" + "</tr>"
                         + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' value='"+eqData.synchronizationMethod+"'></td>" + "</tr>"
-                        + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<input type='number' id='CS' value=" + eqData.communicationSpeed + "></td>" + "</tr>"
-                        + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<input type='number'id='DL' value='"+eqData.dataLength+"'></td>" + "</tr>"
-                        + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<input type='number'id='SB' value='"+eqData.stopBit+"'></td>" + "</tr>"
+                        + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
+                        + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" +"<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                        + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>"+"</td>" + "</tr>"
                         + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                         + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td>" + "<input type='text'id='EC' value='"+eqData.errorControl+"'></td>" + "</tr>"
                         + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td>" + "<input type='text'id='BC' value='"+eqData.busyControl+"'></td>" + "</tr>" + "</tbody>";
                     $("#eqfirstsetting").append(maintext);
 
                     $("#PR option:eq(" + eqData.parity + ")").attr("selected", "selected");
+                    $("#SB option:eq(" + eqData.stopBit + ")").attr("selected", "selected");
+                    $("#DL").val(eqData.dataLength).attr("selected", "selected");
+                    $("#CS").val(eqData.communicationSpeed).attr("selected", "selected");
+                    $("#EI").val(eqData.electricalInterface).attr("selected", "selected");
                     clickname="";
-                }
-            });
-
-            //import 버튼 클릭시 이벤트
-            $("#importbtn").click(function () {
-                targetEq='';
-                console.log(clickname);
-                if (clickname == ""||clickname==null) {
-                    // 파일 열어서 불러오기
-                    
                 }
             });
 
@@ -422,19 +420,30 @@
                         $("#updateeqsetting").show();
                         $("#inserteqsetting").hide();
                         var text = "<tbody class='clickinfo'>" +
-                            "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td id='eiinfo'>" + eqData.electricalInterface + "</td>" + "</tr>"
+                            "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td id='eiinfo'>"+"<select id='eiinfoSelect'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+"</td>"+ "</tr>"
                             + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td id='sminfo'>" + eqData.synchronizationMethod + "</td>" + "</tr>"
-                            + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td id='csinfo'>" + eqData.communicationSpeed + "</td>" + "</tr>"
-                            + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td id='dlinfo'>" + eqData.dataLength + "</td>" + "</tr>"
-                            + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td id='sbinfo'>" + eqData.stopBit + "</td>" + "</tr>"
+                            + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td id='csinfo'>"+"<select id='csinfoSelect'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
+                            + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td id='dlinfo'>" +"<select id='dlinfoSelect'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                            + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td id='sbinfo'>"+"<select id='sbinfoSelect'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                             + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td id='prinfo'><select id='prinfoSelect'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select></td>" + " </tr>"
                             + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td id='ecinfo'>" + eqData.errorControl + "</td>" + "</tr>"
                             + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td id='bcinfo'>" + eqData.busyControl + "</td>" + "  </tr>" + "</tbody>";
                         $("#eqfirstsetting").append(text);
-                        // 패리티 선택 값 보여주기
-                        console.log(eqData.parity);
+
                         $("#prinfoSelect option:eq(" + eqData.parity + ")").attr("selected", "selected");
                         $('#prinfoSelect').attr('disabled', 'true');
+
+                        $("#eiinfoSelect").val(eqData.electricalInterface).attr("selected", "selected");
+                        $('#eiinfoSelect').attr('disabled', 'true');
+
+                        $("#dlinfoSelect").val(eqData.dataLength).attr("selected", "selected");
+                        $('#dlinfoSelect').attr('disabled', 'true');
+
+                        $("#sbinfoSelect option:eq(" + (eqData.stopBit-1) + ")").attr("selected", "selected");
+                        $('#sbinfoSelect').attr('disabled', 'true');
+
+                        $("#csinfoSelect").val(eqData.communicationSpeed).attr("selected", "selected");
+                        $('#csinfoSelect').attr('disabled', 'true');
                         // 변경 못하게 막기
                         break;
                     }
@@ -549,16 +558,20 @@
                     $(".eqNamebtn").find('button').css({'background-color': '#f7f7f7', 'color': 'black'});
                     update_eqinfo = true;
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' value="+eqData.name+">" + "</td>" + "</tr>"
-                            + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<input type='text' id='EI' value="+ eqData.electricalInterface + "></td>" + "</tr>"
+                            + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+"</td>" + "</tr>"
                             + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' value='"+eqData.synchronizationMethod+"'></td>" + "</tr>"
-                            + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<input type='number' id='CS' value=" + eqData.communicationSpeed + "></td>" + "</tr>"
-                            + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<input type='number'id='DL' value='"+eqData.dataLength+"'></td>" + "</tr>"
-                            + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<input type='number'id='SB' value='"+eqData.stopBit+"'></td>" + "</tr>"
+                            + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
+                            + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                            + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>"+"</td>" + "</tr>"
                             + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                             + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td>" + "<input type='text'id='EC' value='"+eqData.errorControl+"'></td>" + "</tr>"
                             + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td>" + "<input type='text'id='BC' value='"+eqData.busyControl+"'></td>" + "</tr>" + "</tbody>";
                     $("#eqfirstsetting").append(maintext);
                     $("#PR option:eq(" + eqData.parity + ")").attr("selected", "selected");
+                    $("#EI").val(eqData.electricalInterface).attr("selected", "selected");
+                    $("#CS").val(eqData.communicationSpeed).attr("selected", "selected");
+                    $("#DL").val(eqData.dataLength).attr("selected", "selected");
+                    $("#SB option:eq(" + eqData.stopBit + ")").attr("selected", "selected");
                     clickname="";
                 });
                 
@@ -573,26 +586,21 @@
 
         function openTextFile() {
             var input = document.createElement("input");
-
+            var result;
             input.type = "file";
             input.accept = ".xml";
 
-            input.onchange = function (event) {
-                processFile(event.target.files[0]);
-            };
-
             input.click();
-        }
-
-        function processFile(file) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var response = ajaxFile(reader.result, "import");
-                alert(response.message);
-                location.reload();
+            input.onchange = function (event) {
+                var reader = new FileReader();
+                reader.readAsText(event.target.files[0], "utf-8");
+                reader.onload = function () {
+                    result = reader.result;
+                };
+                console.log(result);
+    
+                // result = ajaxFile(reader.result, "import");
             };
-
-            reader.readAsText(file, "utf-8");
         }
         
         (function checkBrowser(){
@@ -601,7 +609,6 @@
             else if(agent.indexOf("safari")!=-1){_browserState="safari";}
             else if(agent.indexOf("firefox")!=-1){_browserState="firefox";}
             else if(agent.indexOf("msie")!=-1 || agent.indexOf('trident')!=-1){_browserState="IE"}
-            for(let i=0;i<5;i++){ console.warn("connected Browser is "+_browserState);}
         })();
 
         // Extension Download reProduction Code
@@ -679,11 +686,14 @@
                         <div class="card content">
                             <div class="card-header">
                                 <div class="left card-title">EqSetting</div>
-                                <div class="btn-group" style="float: right">
-                                    <button type="button" class="btn btn-info" onclick="openTextFile()">Import</button>
-                                    <button type="button" class="btn btn-info" id="exportbtn">Export</button>
-                                    <button type="button" id="inserteq" class="btn btn-info">+</button>
+                                <div class="row" style="float: right;">
+                                    <div class="btn-group" style="margin-right: 5px;">
+                                        <button type="button" class="btn btn-info" onclick="openTextFile()">Import</button>
+                                        <button type="button" class="btn btn-info" id="exportbtn">Export</button>
+                                    </div>
+                                    <button type="button" id="inserteq" class="btn btn-info" style="margin-left: auto;">New</button>
                                 </div>
+
 <%--                                <button class="btn btn-info float-right" type="button" id="inserteq">+</button>--%>
                             </div>
                             <div class="card-body">

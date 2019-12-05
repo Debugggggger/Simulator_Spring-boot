@@ -12,10 +12,13 @@
 		<li class="nav-item"><a class="nav-link" data-widget="pushmenu"
 			href="#"><i class="fas fa-bars"></i></a></li>
 	</ul>
-                
+
+	      
+	    
 	<!-- Right navbar links -->
 	<ul class="navbar-nav ml-auto">
 		<form class="form-inline ml-3">
+			<button type="button" class="btn btn-sm btn-info" id="manual">Manual</button>  
 			<select class="form-control form-control-sm" id="eqSelect">
 			</select>
 		</form>
@@ -40,4 +43,9 @@
 	} else {
 	    console.log(response.message);
 	}
+	
+	$(document).on("click", "#manual", function() {
+        var url = "/manual";  
+        window.open(url, "_blank", "width = 600, height = 600, resizable=no");            
+	});
 </script>

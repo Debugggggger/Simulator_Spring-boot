@@ -35,6 +35,9 @@ public class FileAPI{
         Eq eq = File.load(name, path);
         File.remove(name, path);
 
+        if(eq == null){
+            return new JSONResult(500, "파일형식이 맞지 않습니다.", null);
+        }
         if(eq.getEqSetting() == null) {
             return new JSONResult(500, "파일형식이 맞지 않습니다.", null);
         }

@@ -94,9 +94,7 @@
         }
 
         .conDel {
-            height: auto;
-            width: 5%;
-            border: solid 1px gray;
+        position : fixed;
             float: right;
         }
 
@@ -105,9 +103,8 @@
             height: auto;
             width: 5%;
             padding: 0;
-            top: auto;
+            top: 0px;
             right: 0px;
-            border: solid 1px gray;
         }
 
         .statistic * {
@@ -137,9 +134,7 @@
         var sock;
         var filePath;
         var requests = new Array();
-
         filePath = ajaxPath();
-
         var scenList = new Array(); //저장된 시나리오 리스트
         var eqName;
         var lineNumber;
@@ -152,6 +147,9 @@
         var console_data = new Array();
         var countScenario = 0;
         var excutionscenario = true;
+        var DisSuccess = new Array();
+        var clicklf = new Array();
+        var clickedconsole = true;
         $(document).ready(function () {
 
             sock = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/api/echo");
@@ -299,7 +297,6 @@
             }
 
             //On Click Event
-            var clicklf = new Array();
             clicklf.unshift(testResult[0]);
             clicklf.push(testResult[0]);
             $(document).on("click", "ul.tab_head_list li", function (e) {
@@ -449,7 +446,6 @@
                             "reservationStart": s_dt,
                             "reservationEnd": e_dt
                         };
-                        //console.log(exeParam);
                         requests.push(exeParam);
 
                         $(".excutioncount").attr('disabled', true);
@@ -505,12 +501,19 @@
 
             dragAndDrawHeight();  	// .draw, .drag div 사이즈 조정
 
+            $(".console").click(function(event){
+                clickedconsole = false;
+            });
+            $('html').click(function(e) { 
+                if(!$(e.target).hasClass("consoleText")) {
+                clickedconsole = true;} 
+            });
         });/*document load 끝!*/
 
         function dragAndDrawHeight() { 	// .draw, .drag div 사이즈 조정
             var h = $(".tab_body").innerHeight() - $(".front_body").innerHeight() - $(".console").innerHeight();
-            $(".draw").height(h * 0.985);
-            $(".drag").height(h * 0.015);
+            $(".draw").height(h * 0.65);
+            $(".drag").height(h * 0.05);
             // 최대 최소 사이즈 조정
             var maxH = $(".tab_body").innerHeight() - $(".front_body").innerHeight();
             $(".console").css("max-height", maxH * 0.99);
@@ -520,6 +523,7 @@
 
         function consoleDragResize(tabId) {	// 콘솔창 사이즈 조정
             var drawH, consoleH;
+        	var obj = $(".conDel").offset();
             $(tabId).find(".drag").draggable({
                 axis: "y",
                 start: function (event, ui) {
@@ -531,6 +535,7 @@
                     var shift = ui.position.top;
                     $(tabId).find(".draw").height(drawH + shift - shiftInitial);
                     $(tabId).find(".console").height(consoleH - shift + shiftInitial);
+                    $(tabId).find(".conDel").css("top", obj.top + shift - shiftInitial);
                 }
             });
         }
@@ -571,19 +576,18 @@
             var date = result.resultDate;
             // $(" ." + result.port + " .console").append("<div class = 'consoleText console" + index + " " + result.port + " " + resultMessage + "' style='background:" + color + "'>"
             //     + time + text + "</div>");
-            console.log("통계");
-            console.log(result);
+            //console.log("통계");
+            //console.log(result);
         }
 
         // 콘솔 추가
         function insert_con(data, testResult) {
-            var result;
+            var result = JSON.parse(data.data);
             var text;
             var date;
             var color;
             var index;
             var indexCk = false;
-            result = JSON.parse(data.data);
             checksum = result.checksum;
             if (checksum == "" || checksum == null || checksum == undefined || (checksum != null && typeof checksum == "object" && !Object.keys(checksum).length)) {
                 // checksum 빈 값 체크
@@ -596,6 +600,7 @@
             if (resultMessage == "Exception") { //예외에러
                 console.log("에러")
             } else if (resultMessage == "Scenario") { // 시나리오
+                init_DisSuccess(result.port);
                 index = $("." + result.port).find(" .Scenario").length / 2;
                 text = " " + result.scenarioName + " " + result.resultMessage;
                 if (result.resultMessage != "OK") color = "red"
@@ -612,6 +617,17 @@
                 testResult.forEach(function (e, i) {
                     if (e == result.port) {
                         console_data[i].push([result.hexStrings, result.ascStrings, accrue]);
+                        DisSuccess[i]++;
+                        var place = "." + result.port+" #line"+DisSuccess[i];
+                    if (result.resultMessage == "OK") {
+                            $(place).find("hr").css('border','solid 2px green');
+                            $(place).find(".arrow").css('color','green');
+                            }
+                    else {
+                        color = "red";
+                        $(place).find("hr").css('border','solid 2px red');
+                        $(place).find(".arrow").css('color','red');
+                        }
                     }
                 });
                 var name = result.frameName;
@@ -619,10 +635,10 @@
                 index = $("." + result.port).find(" .MessageFrame").length / 2;
                 var text = name + " | " + length + " | " + result.resultMessage;
                 indexCk = true;
-                if (result.resultMessage != "OK") color = "red"
             } else if (resultMessage == "Start") {
                 console.log("시작");
                 text = "START";
+                init_DisSuccess(result.port);
                 $(" ." + result.port).find(".s_datepicker").val(date);
                 // 여기서 스타트 찍기
                 //    result.port;
@@ -638,6 +654,14 @@
                     $("#excutionstopbtn").hide();
                     excutionscenario = true;
                 }
+            }
+            function init_DisSuccess(com){
+                for(var i=0;i<testResult.length;i++){ //배열 초기화
+                    DisSuccess[i]=0;
+                }
+                var place = "." + com
+                $(place).find("hr").css('border','');
+                $(place).find(".arrow").css('color','');
             }
 
             function set_watch(s, com, time) {
@@ -683,7 +707,6 @@
                     length = e[index + 1][2];
                 }
             })
-            console.log(length);
             if ($(this).find(".row").length <= 0) {
                 $(com + ".consoleText *").remove();
                 $(this).append("<div class = 'row detail'><div class = 'rawli'></div><div class = 'ascli'></div></div>");
@@ -791,13 +814,14 @@
             $(side + '.statistic *').val("");
         }
 
-        //포커스 이벤트
+      //포커스 이벤트
         function scrollDown() {
             var objDiv = document.getElementsByClassName("console");
-            for (var i = 0; i < objDiv.length; i++) {
-                objDiv[i].scrollTop = objDiv[i].scrollHeight;
+            if(clickedconsole == true){
+                for (var i = 0; i < objDiv.length; i++) {
+                    objDiv[i].scrollTop = objDiv[i].scrollHeight;
+                }
             }
-            $(".console").focus()
         }
 
         function cardHeight() { /* card height 화면 꽉 차게 */
@@ -833,18 +857,44 @@
                 timerE = "<div class='timerE' style='display: block'/>";
             }
             if (lineNumber == 0) {
-                var add = "<div class='line row addtimer' id = 'line" + lineNumber + "'>" + "<div class='col-md-2'>" + timerH + "</div>" + "<div class='col-md-1'><div class=\"host_l\" ></div></div>" + "<div class='col-md-6'/>" + "<div class='col-md-1'><div class=\"eq_1\"></div></div>" + "<div class='col-md-2'>" + timerE + "</div>" + "</div>";
+                var add = "<div class='line row addtimer' id = 'line" + lineNumber + "'>" 
+                + "<div class='col-md-2'>" + timerH + "</div>" 
+                + "<div class='col-md-1'><div class=\"host_l\" ></div></div>" 
+                + "<div class='col-md-6'/>" 
+                + "<div class='col-md-1'><div class=\"eq_1\"></div></div>" 
+                + "<div class='col-md-2'>" + timerE + "</div>" 
+                + "</div>";
                 $(add).appendTo(to + "#unsort");
             }
             lineNumber++;
             if (type == 'command') {
                 timerE = "";
-                arrow = "<div class='col-md-6' style ='padding:0'>" + "<div class='row'>" + "<div class = 'col-md-10' style ='padding:0'>" + "<div class='c_name'>" + lineName + "</div>" + "<hr></div>" + "<div class='col-md-1 arrowright' style ='padding:0'>▷</div>" + "</div>" + "</div>";
+                arrow = "<div class='col-md-6' style='padding: 0px;'>" 
+                + "<div class='row' style='padding: 0px;'>" 
+                + "<div class = 'col-md-11' style='padding: 0px;'>" 
+                + "<div class='c_name' style='padding: 0px;'>" + lineName + "</div>" 
+                + "<hr/>"+"</div>" 
+                + "<div class='arrow arrowright'style='padding: 0px;' >▶</div>" 
+                + "</div>"
+                + "</div>";
             } else {
                 timerH = "";
-                arrow = "<div class='col-md-6' style ='padding:0'>" + "<div class='row'>" + "<div class='col-md-1 arrowright' style ='padding:0'>◁</div>" + "<div class = 'col-md-10' style ='padding:0'>" + "<div class='c_name'>" + lineName + "</div>" + "<hr></div>" + "</div>" + "</div>";
+    			arrow = "<div class='col-md-6' style='padding: 0px;'>" 
+    			+ "<div class='row' style='padding: 0px;'>" 
+    			+ "<div class='arrow arrowleft' style='padding: 0px;'>◀</div>" 
+    			+ "<div class = 'col-md-11' style='padding: 0px;'>" 
+    			+ "<div class='c_name' style='padding: 0px;'>" + lineName + "</div>" 
+    			+ "<hr/>"+"</div>" 
+    			+ "</div>"
+    			+ "</div>";
             }
-            var text = "<div class='line row' id = 'line" + lineNumber + "' >" + "<div class='col-md-2' >" + timerH + "</div>" + "<div class='col-md-1'>" + "<div class=\"host_l\" >" + "</div>" + "</div>" + arrow + "<div class='col-md-1'>" + "<div class=\"eq_1\">" + "</div>" + "</div>" + "<div class='col-md-2'>" + timerE + "</div>" + "</div>";
+            var text = "<div class='line row' id = 'line" + lineNumber + "' >" 
+            + "<div class='col-md-2' >" + timerH + "</div>" 
+            + "<div class='col-md-1'><div class='host_l' ></div></div>" 
+            + arrow 
+            + "<div class='col-md-1'><div class='eq_1'></div></div>" 
+            + "<div class='col-md-2'>" + timerE + "</div>" 
+            + "</div>";
             $(text).appendTo(to + "#sortable");
         }
 
@@ -859,8 +909,8 @@
                 var body = "<div class='tab_body " + com + " " + side + "' id = " + side + "_" + com + ">"
                     + "<div class = 'front_body row' ></div>"
                     + "<div class = 'draw' ></div>"
-                    + "<div class = 'console " + side + "'>"
                     + "<div class = 'drag' ></div>"
+                    + "<div class = 'console " + side + "'>"
                     + "</div>"
                     + "<div class = 'statistic'></div>"
                     + "</div>";
@@ -883,7 +933,7 @@
                 var statistic =
                     "<label class='col-form-label' > time :</label><input type='text' class='" + com + " datepicker s_datepicker' id = 's_date' name='date'>"
                     + "<label class='col-form-label' > ~ </label><input type='text' class='" + com + " datepicker e_datepicker' id = 'e_date' name='date'>"
-                    + "<input type='text' class='runtime number' id = name='date'>"
+                    + "<label class='col-form-label' > total run : </label>"+"<input type='text' class='runtime number' id = name='date'></br>"
                     + "<label class='col-form-label' > [ Scenario ] success : </label><input type='text' class='number' id = 's_scen' disabled='true'>"
                     + "<label class='col-form-label' > fail : </label><input type='text'  class='number ' id = 'f_scen' disabled='true'>"
                     + "<label class='col-form-label' > total : </label><input type='text'  class='number ' id = 't_scen' disabled='true'></br>"

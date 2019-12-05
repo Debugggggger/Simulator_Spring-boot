@@ -41,17 +41,16 @@
 
 .timerH, .timerE {
 	width: 100%;
-	height: 100%;
-	border: solid 1px gray;
+	height: 50%;
 }
 
 .timer {
 	width: 100%;
-	height: 50%;
+	height: 25px;
 	border: solid 1px gray;
 }
 
-.host_l {
+.host_l{
 	height: 100%;
 	border-right: 1px solid black;
 }
@@ -75,18 +74,13 @@ hr {
 	padding: 5%;
 }
 
-#commandList {
+#commandList, #responseList {
 	overflow: auto;
 	padding: 5%;
 }
 
 #buttonZone {
 	margin-top: 5%;
-}
-
-#responseList {
-	overflow: auto;
-	padding: 5%;
 }
 
 h3 {
@@ -108,12 +102,10 @@ h3 {
 	width: 100%;
 }
 
-.arrowright {
+.arrowright, .arrowleft {
+	width : 16px;
+	text-align: center;
 	margin-top: 7.5%;
-}
-
-.arrowleft {
-	margin-left: 5px;
 }
 
 #sortable, #unsort {
