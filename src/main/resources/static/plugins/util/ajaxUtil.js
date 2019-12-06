@@ -371,3 +371,30 @@ function ajaxFile(request, url) {
     }
     return result;
 }
+function ajaxFileSave(request) {
+    var result;
+    $.ajax({
+        url: '/api/file/testFileSave',
+        type: 'POST',
+        enctype : "multipart/form-data",
+        async: false,
+        // data: {
+        //     "request" : request
+        // },
+        // dataType: 'json',
+        data : request,
+        success: function (data) {
+            result = data;
+            consoel.log(result);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            result = {
+                "code" : jqXHR.status,
+                "message" : "Bad",
+                "data" : jqXHR.responseText
+            };
+        }
+    });
+
+    return result;
+}

@@ -82,6 +82,33 @@
         var _browserState = 'unknown';
         
         $(document).ready(function () {
+            $("#testButton").click(function (){
+                var formData = new FormData();
+                var files = document.getElementById("fileTest").files[0];
+                formData.append("file",files);
+
+                $.ajax({
+                    url: '/api/file/testFileSave',
+                    type: 'POST',
+                    enctype: "multipart/form-data",
+                    // async: false,
+                    data: formData,
+                    contentType : false,
+                    processData : false,
+                    success: function (data) {
+                        result = data;
+                        console.log(result);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        result = {
+                            "code": jqXHR.status,
+                            "message": "Bad",
+                            "data": jqXHR.responseText
+                        };
+                        console.log(result);
+                    }
+                });
+            });
             cardHeight();
             $("#updateeqsetting").hide();
             $("#inserteqsetting").show();
@@ -667,6 +694,8 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
+    <input type="file" id = "fileTest" name = "files" value = "파일 선택">
+    <input type="button" id = "testButton" value="TestTest">
     <!-- common nav -->
     <%@include file="include/common_nav.jsp" %>
     <!-- /.common nav -->
@@ -731,7 +760,6 @@
         </section>
         <!-- /.content -->
     </div>
-
     <!-- common footer -->
     <%@include file="include/common_footer.jsp" %>
     <!-- ./common footer -->
