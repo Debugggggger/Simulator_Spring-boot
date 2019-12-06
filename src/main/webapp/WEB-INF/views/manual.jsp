@@ -87,8 +87,6 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    var tdArr = new Array();
-    
     $('#manualListTable').DataTable( {
         deferRender:    true,
         scrollY:        300,
@@ -111,11 +109,24 @@ $(document).ready(function() {
 	});
     
     $(document).on("click", "#manualUploadBtn", function() {
-        openTextFile();
+
 	});
     
     $(document).on("click", "#manualDownloadBtn", function() {
-
+        var fileNameArr = new Array();
+        
+        $("tbody").find("tr").each(function() {          
+            var tr = $(this);
+            var td = tr.children();
+            
+            if ($(this).find(".fileChbox").is(":checked")) {	// 선택한 파일이름들 배열에 저장
+                fileNameArr.push(td.eq(1).text());
+            }
+        });
+          
+        if (fileNameArr.length > 0) {	// 선택한 파일이름이 있으면
+            console.log(fileNameArr);
+        }
    });
 });
 
