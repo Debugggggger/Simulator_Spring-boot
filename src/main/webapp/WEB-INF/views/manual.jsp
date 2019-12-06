@@ -87,20 +87,9 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+    var tdArr = new Array();
     
     $('#manualListTable').DataTable( {
-        columnDefs: [
-            {
-               targets: 0,
-               checkboxes: {
-                  selectRow: true
-               }
-            }
-         ],
-         select: {
-            style: 'multi'
-         },
-         order: [[1, 'asc']],
         deferRender:    true,
         scrollY:        300,
         scrollCollapse: true,
@@ -109,68 +98,27 @@ $(document).ready(function() {
         dom: '<"top"f>t'
     });
     
-    /* manual search */        
-    $(document).on("keyup search", "#searchManual", function() {
-        searchLogic("searchManual", "manual");
-    });
+    $(document).on("change", "#allChBox", function() {
+        if ($("#allChBox").is(":checked")) {
+            $(".fileChbox").prop('checked', true);
+        } else {
+            $(".fileChbox").prop('checked', false);
+		}
+	});
+    /* 파일명 dblclick 하면 download */
+    $(document).on("dblclick", ".manual", function() {	
+        console.log($(this).text());
+	});
     
     $(document).on("click", "#manualUploadBtn", function() {
         openTextFile();
 	});
     
     $(document).on("click", "#manualDownloadBtn", function() {
-        /* var all=[];		// 모든 option
-        $('.manual').each(function(i, selected){ 
-            all[i] = $(selected).text(); 
-        });
-        
-        var foo = [];	// selected option
-        $('#manualListSelect :selected').each(function(i, selected){ 
-            console.log($(selected).text());
-            foo[i] = $(selected).text(); 
-        });
-        
-        var de= $.grep(all, function(element) {	// unselected option
-            return $.inArray(element, foo) !== -1;
-        });
-        
-        if (de.length == 0) {
-            alert("DownLoad 할 파일을 선택하세요.");
-        } */
-	});
-    
-    $(document).on("dblclick", ".manual", function() {
-        console.log($(this).text());
-	});
+
+   });
 });
 
-function searchLogic(inputBoxId, searchClass) {	// (input type = search "ID", 검색할 "class")
-    var input, filter, txtValue;
-    input = document.getElementById(inputBoxId);
-    filter = input.value.toUpperCase();
-    
-    $("." + searchClass).each(function () {
-        txtValue = $(this).text();
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            $(this).show();
-        } else {
-            $(this).removeAttr("style").hide();
-        }
-    }); 
-}
-
-function openTextFile() {
-    var input = document.createElement("input");
-
-    input.type = "file";
-    input.accept = ".xml";
-
-    input.onchange = function (event) {
-        processFile(event.target.files[0]);
-    };
-
-    input.click();
-}
 </script>
 
 </head>
@@ -178,92 +126,77 @@ function openTextFile() {
 <body>
 
 <div class = "card col-12" id = "manualCard">
-	<div class = "card-header">
-		<div class="left card-title">Manual</div>
-	</div>
-	<div class = "card-body" id = "manualCardBody">
-	<!-- 	<div class="post input-group input-group-sm" id = "searchManualDiv">
-			<input id = "searchManual" class="form-control form-control-navbar filter" type="search" placeholder="Search">
-			<div class="input-group-append">
-				<button class="btn btn-navbar" type="submit">
-					<i class="fas fa-search"></i>
-				</button>
-			</div>
-		</div> -->
-		<div class="post" id = "manualListDiv">
-			<table id = "manualListTable" class="display">
-				<thead>
-					<tr>
-						<th></th>
-						<th>파일</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th></th>
-						<th>asdf</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>ssss</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>gggg</th>
-					</tr>
-				</tbody>
-			</table>
-			<!-- <select id = "manualListSelect" class="form-control post" multiple="multiple">
-				<option class = "manual">aaaaaaaaa</option>
-				<option class = "manual">bbbbbbbbbbb</option>
-				<option class = "manual">ccccccccc</option>
-				<option class = "manual">ssssss</option>
-				<option class = "manual">haaaassd</option>
-			</select> -->
-		</div>
+   <div class = "card-header">
+      <div class="left card-title">Manual</div>
+   </div>
+   <div class = "card-body" id = "manualCardBody">
+      <div class="post" id = "manualListDiv">
+         <table id = "manualListTable" class="display">
+            <thead>
+               <tr>
+                  <th><input type="checkbox" id="allChBox"/></th>
+                  <th>파일</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>asdf</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>ssss</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+               <tr>
+                  <th><input type="checkbox" class ="fileChbox"></th>
+                  <th>gggg</th>
+               </tr>
+            </tbody>
+         </table>
+      </div>
 
-		<div id = "manualBtnDiv" class="post">
-			<button type="button" class="btn btn-info" id = "manualUploadBtn">Upload</button>
-			<button type="button" class="btn btn-info" id ="manualDownloadBtn">Download</button>
-		</div>
-			
-	</div>
+      <div id = "manualBtnDiv" class="post">
+         <button type="button" class="btn btn-info" id = "manualUploadBtn">Upload</button>
+         <button type="button" class="btn btn-info" id ="manualDownloadBtn">Download</button>
+      </div>
+         
+   </div>
 </div>
 
 </body>
