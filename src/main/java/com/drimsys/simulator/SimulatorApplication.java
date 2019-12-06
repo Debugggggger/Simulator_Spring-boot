@@ -10,9 +10,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 @SpringBootApplication
 public class SimulatorApplication {
+	private static boolean ablePort() {
+		return true;
+//		try {
+//			Socket socket = new Socket();
+//			socket.connect(new InetSocketAddress("127.0.0.1", 8080), 200);
+//			socket.close();
+//			return true;
+//		} catch (Exception e) {
+//			return false;
+//		}
+	}
+
 	private static void initDir() {
 		File file = new java.io.File("resource");
 		if(!file.exists()) {
@@ -36,6 +50,25 @@ public class SimulatorApplication {
 		}
 	}
 
+	private static void start(ConfigurableApplicationContext[] app, String[] args) {
+		if(ablePort()) {
+			app[0] = SpringApplication.run(SimulatorApplication.class, args);
+			JOptionPane.showMessageDialog(null, "서버가 실행되었습니다.");
+		} else {
+			JOptionPane.showMessageDialog(null, "8080포트가 사용중 입니다.");
+		}
+	}
+
+	private static void stop(ConfigurableApplicationContext[] app) {
+		app[0].close();
+		JOptionPane.showMessageDialog(null, "서버가 종료되었습니다.");
+	}
+
+	private static void restart(ConfigurableApplicationContext[] app, String[] args) {
+		app[0].close();
+		start(app, args);
+	}
+
 	public static void main(String[] args) {
 		final ConfigurableApplicationContext[] app = {null};
 		initDir();
@@ -47,11 +80,9 @@ public class SimulatorApplication {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						if(app[0] == null) {
-							JOptionPane.showMessageDialog(null, "서버가 실행되었습니다.");
-							app[0] = SpringApplication.run(SimulatorApplication.class, args);
+							start(app, args);
 						} else {
-							JOptionPane.showMessageDialog(null, "서버가 종료되었습니다.");
-							app[0].close();
+							stop(app);
 						}
 					}
 				}
@@ -61,10 +92,13 @@ public class SimulatorApplication {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(app[0] != null) {
-					JOptionPane.showMessageDialog(null, "이미 서버가 실행중입니다.");
+					int rst = JOptionPane.showConfirmDialog(null, "서버를 재실행 하시겠습니까?", "Confirm", JOptionPane.YES_NO_OPTION);
+
+					if (rst == JOptionPane.YES_OPTION) {
+						restart(app, args);
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, "서버가 실행되었습니다.");
-					app[0] = SpringApplication.run(SimulatorApplication.class, args);
+					start(app, args);
 				}
 			}
 		});
@@ -75,8 +109,7 @@ public class SimulatorApplication {
 				if(app[0] == null) {
 					JOptionPane.showMessageDialog(null, "이미 서버가 종료되었습니다.");
 				} else {
-					JOptionPane.showMessageDialog(null, "서버가 종료되었습니다.");
-					app[0].close();
+					stop(app);
 				}
 			}
 		});
@@ -89,8 +122,7 @@ public class SimulatorApplication {
 			}
 		});
 
-		JOptionPane.showMessageDialog(null, "서버가 실행되었습니다.");
-		app[0] = SpringApplication.run(SimulatorApplication.class, args);
+		start(app, args);
 	}
 
 }

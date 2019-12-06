@@ -4,10 +4,8 @@ import com.drimsys.simulator.dto.Eq;
 import com.drimsys.simulator.dto.JSONResult;
 import com.drimsys.simulator.util.Convert;
 import com.drimsys.simulator.util.File;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
@@ -15,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import static com.drimsys.simulator.util.File.XML_PATH;
+import static com.drimsys.simulator.util.File.save;
 
 @RestController
 @RequestMapping(value = "/api/file")
@@ -58,6 +57,29 @@ public class FileAPI{
         }
 
         return new JSONResult(500, "파일저장에 실패했습니다.", null);
+    }
+
+    private JSONResult testFileSave(MultipartFile files) {
+
+        try {
+            String name = files.getOriginalFilename();
+            String path = "resource/manual/";
+            byte[] data = files.getBytes();
+
+            BufferedOutputStream bs = null;
+            try {
+                bs = new BufferedOutputStream(new FileOutputStream(path + name));
+                bs.write(data);
+                bs.close(); //반드시 닫는다.
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+
+            return new JSONResult(200, "Save Success", null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new JSONResult(500, "Save Fail",null);
+        }
     }
 
     @RequestMapping(value = "/import", method = RequestMethod.POST)
@@ -104,5 +126,9 @@ public class FileAPI{
             e.getStackTrace();
             return new JSONResult(500, "Export Error", e.getMessage());
         }
+    }
+    @RequestMapping(value = "/testFileSave", method = RequestMethod.POST)
+    public JSONResult testFileSave(HttpServletRequest request, @RequestParam("file") MultipartFile files) {
+        return testFileSave(files);
     }
 }

@@ -24,6 +24,7 @@ import java.util.List;
 
 public class File {
     public static String XML_PATH = "resource/xml/";
+    public static String MANUAL_PATH = "resource/manual/";
 
     private static Components initComponents() {
         List<Component> init = new LinkedList<>();
