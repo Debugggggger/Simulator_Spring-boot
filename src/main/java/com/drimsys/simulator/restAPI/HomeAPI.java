@@ -45,4 +45,11 @@ public class HomeAPI {
         modelAndView.setViewName("/execution");
         return modelAndView;
     }
+    
+    @RequestMapping(value = "/manual", method = RequestMethod.GET)
+    public ModelAndView manualGET() {
+    	ModelAndView modelAndView = new ModelAndView();
+    	modelAndView.setViewName("/manual");
+        return modelAndView;
+    }
 }

@@ -470,19 +470,19 @@
                 return date;
             }
 
-            //실행 중지 클릭시 이벤트
-            $("#excutionstopbtn").click(function () {
-                sock.send("CLOSE ALL PORT");
-                $("#excutionbtn").show();
-                $("#excutionstopbtn").hide();
-                if (lselect == Rselect) {
-                    $(".excutioncount").attr('disabled', true);
-                    $("#left .excutioncount").attr('disabled', false);
-                } else {
-                    $(".excutioncount").attr('disabled', false);
-                }
-                excutionscenario = true;
-            });
+            // //실행 중지 클릭시 이벤트
+            // $("#excutionstopbtn").click(function () {
+            //     sock.send("CLOSE ALL PORT");
+            //     $("#excutionbtn").show();
+            //     $("#excutionstopbtn").hide();
+            //     if (lselect == Rselect) {
+            //         $(".excutioncount").attr('disabled', true);
+            //         $("#left .excutioncount").attr('disabled', false);
+            //     } else {
+            //         $(".excutioncount").attr('disabled', false);
+            //     }
+            //     excutionscenario = true;
+            // });
 
             $(document).on("mousedown", "#left", function (e) {	    // 왼쪽 tab console drag 했을 때 모션
                 if (clicklf[0] == clicklf[1]) {	// 왼 == 오
@@ -538,6 +538,20 @@
                     $(tabId).find(".conDel").css("top", obj.top + shift - shiftInitial);
                 }
             });
+        }
+
+        //stop 버튼 동작 이벤트
+        function stopexcution() {
+            sock.send("CLOSE ALL PORT");
+                $("#excutionbtn").show();
+                $("#excutionstopbtn").hide();
+                if (lselect == Rselect) {
+                    $(".excutioncount").attr('disabled', true);
+                    $("#left .excutioncount").attr('disabled', false);
+                } else {
+                    $(".excutioncount").attr('disabled', false);
+                }
+                excutionscenario = true;
         }
 
         //nameList 중복값 방지
@@ -650,9 +664,7 @@
                 countScenario--;
                 console.log("끝 / " + result.port.toString());
                 if (countScenario == 0) {
-                    $("#excutionbtn").show();
-                    $("#excutionstopbtn").hide();
-                    excutionscenario = true;
+                    stopexcution();
                 }
             }
             function init_DisSuccess(com){
@@ -1016,7 +1028,6 @@
 
         //새로고침, 나가기, 다른 페이지로 이동시 이벤트
         window.onbeforeunload = function (e) {
-            // sock.send("CLOSE ALL PORT");
             var dialogText = 'Dialog text here';
             e.returnValue = dialogText;
             return dialogText;
@@ -1074,7 +1085,7 @@
                                         Start
                                     </button>
                                     <button class="btn btn-block btn-danger col-md-2" id="excutionstopbtn"
-                                            type="button">Stop
+                                            type="button" onmousedown="stopexcution()">Stop
                                     </button>
                                     <div class="col-md-2">
                                     </div>

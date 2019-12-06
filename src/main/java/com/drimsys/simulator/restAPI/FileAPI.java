@@ -4,10 +4,8 @@ import com.drimsys.simulator.dto.Eq;
 import com.drimsys.simulator.dto.JSONResult;
 import com.drimsys.simulator.util.Convert;
 import com.drimsys.simulator.util.File;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
@@ -15,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import static com.drimsys.simulator.util.File.XML_PATH;
+import static com.drimsys.simulator.util.File.save;
 
 @RestController
 @RequestMapping(value = "/api/file")
@@ -103,6 +102,26 @@ public class FileAPI{
         } catch (Exception e) {
             e.getStackTrace();
             return new JSONResult(500, "Export Error", e.getMessage());
+        }
+    }
+    @RequestMapping(value = "/testFileSave", method = RequestMethod.POST)
+    public JSONResult testFileSave(HttpServletRequest request, @RequestParam("file") MultipartFile files) throws Exception{
+        String fileName = files.getOriginalFilename();
+        String filePath = request.getServletContext().getRealPath("");
+        filePath += "../../../resource/manual/";
+        System.out.println(filePath);
+        java.io.File file;
+        try {
+            do {
+                file = new java.io.File(filePath + fileName);
+            } while (file.exists());
+
+            file.getParentFile().mkdirs();
+            files.transferTo(file);
+            return new JSONResult(200, "Save Success", null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new JSONResult(500, "Save Fail",null);
         }
     }
 }
