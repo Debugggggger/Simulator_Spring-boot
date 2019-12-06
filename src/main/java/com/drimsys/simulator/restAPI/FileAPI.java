@@ -59,6 +59,29 @@ public class FileAPI{
         return new JSONResult(500, "파일저장에 실패했습니다.", null);
     }
 
+    private JSONResult testFileSave(MultipartFile files) {
+
+        try {
+            String name = files.getOriginalFilename();
+            String path = "resource/manual/";
+            byte[] data = files.getBytes();
+
+            BufferedOutputStream bs = null;
+            try {
+                bs = new BufferedOutputStream(new FileOutputStream(path + name));
+                bs.write(data);
+                bs.close(); //반드시 닫는다.
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+
+            return new JSONResult(200, "Save Success", null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new JSONResult(500, "Save Fail",null);
+        }
+    }
+
     @RequestMapping(value = "/import", method = RequestMethod.POST)
     public JSONResult importPOST(@RequestBody String request) {
         request = Convert.decodeURL(request);
@@ -105,23 +128,7 @@ public class FileAPI{
         }
     }
     @RequestMapping(value = "/testFileSave", method = RequestMethod.POST)
-    public JSONResult testFileSave(HttpServletRequest request, @RequestParam("file") MultipartFile files) throws Exception{
-        String fileName = files.getOriginalFilename();
-        String filePath = request.getServletContext().getRealPath("");
-        filePath += "../../../resource/manual/";
-        System.out.println(filePath);
-        java.io.File file;
-        try {
-            do {
-                file = new java.io.File(filePath + fileName);
-            } while (file.exists());
-
-            file.getParentFile().mkdirs();
-            files.transferTo(file);
-            return new JSONResult(200, "Save Success", null);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new JSONResult(500, "Save Fail",null);
-        }
+    public JSONResult testFileSave(HttpServletRequest request, @RequestParam("file") MultipartFile files) {
+        return testFileSave(files);
     }
 }
