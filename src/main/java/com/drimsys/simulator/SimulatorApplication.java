@@ -1,6 +1,7 @@
 package com.drimsys.simulator;
 
 import com.drimsys.simulator.systemtray.TrayIconHandler;
+import com.sun.deploy.uitoolkit.impl.fx.ui.FXMessageDialog;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -11,7 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
+
+import static com.drimsys.simulator.util.Monitor.*;
 
 @SpringBootApplication
 public class SimulatorApplication {
@@ -51,11 +55,12 @@ public class SimulatorApplication {
 	}
 
 	private static void start(ConfigurableApplicationContext[] app, String[] args) {
-		if(ablePort()) {
+		try {
+			monitering(TOMCAT_SOCKET);
 			app[0] = SpringApplication.run(SimulatorApplication.class, args);
 			JOptionPane.showMessageDialog(null, "서버가 실행되었습니다.");
-		} else {
-			JOptionPane.showMessageDialog(null, "8080포트가 사용중 입니다.");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "8080포트가 이미 사용중 입니다.");
 		}
 	}
 
@@ -70,6 +75,14 @@ public class SimulatorApplication {
 	}
 
 	public static void main(String[] args) {
+		ServerSocket serverSocket;
+		try {
+			serverSocket = new ServerSocket(APP_SOCKET);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "프로그램이 이미 구동중 입니다.");
+			System.exit(0);
+		}
+
 		final ConfigurableApplicationContext[] app = {null};
 		initDir();
 

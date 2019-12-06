@@ -84,8 +84,12 @@
         $(document).ready(function () {
             $("#testButton").click(function (){
                 var formData = new FormData();
-                var files = document.getElementById("fileTest").files[0];
-                formData.append("file",files);
+                var files = document.getElementById("fileTest").files;
+
+                // formData.append("files", files);
+                for(var idx=0; idx<files.length; idx++) {
+                    formData.append("files", files[idx]);
+                }
 
                 $.ajax({
                     url: '/api/file/testFileSave',
@@ -694,7 +698,7 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-    <input type="file" id = "fileTest" name = "files" value = "파일 선택">
+    <input type="file" id = "fileTest" name = "files" value = "파일 선택" multiple>
     <input type="button" id = "testButton" value="TestTest">
     <!-- common nav -->
     <%@include file="include/common_nav.jsp" %>

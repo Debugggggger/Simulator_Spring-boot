@@ -128,7 +128,10 @@ public class FileAPI{
         }
     }
     @RequestMapping(value = "/testFileSave", method = RequestMethod.POST)
-    public JSONResult testFileSave(HttpServletRequest request, @RequestParam("file") MultipartFile files) {
-        return testFileSave(files);
+    public JSONResult testFileSave(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) {
+        for(MultipartFile file : files) {
+            testFileSave(file);
+        }
+        return null;
     }
 }
