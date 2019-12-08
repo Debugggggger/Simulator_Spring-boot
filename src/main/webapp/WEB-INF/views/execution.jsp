@@ -135,21 +135,24 @@
         var filePath;
         var requests = new Array();
         filePath = ajaxPath();
-        var scenList = new Array(); //저장된 시나리오 리스트
-        var eqName;
-        var lineNumber;
-        var lselect;
-        var Rselect;
-        var clicked_com;
+        var scenList = new Array(); // 저장된 시나리오 리스트
+        var eqName; // 현재 선택된 기기의 이름
+        var lineNumber; // 시나리오 내부의 line 번호 (mkline에서 사용)
+        var lselect; // 현재 왼쪽에 선택된 컴포트
+        var Rselect; // 현재 오른쪽에 선택된 컴포트
+        var clicked_com; // 가장최근 선택된 컴포트
         var clicked_class;
         var nameList = new Array();
         var whatid;
-        var console_data = new Array();
+        var console_data = new Array(); // 콘솔에 표기할 데이터(hex,ascii,length)
         var countScenario = 0;
-        var excutionscenario = true;
-        var DisSuccess = new Array();
+        var excutionscenario = true; // 현재 프로그램이 실행중인지 판별
+        var DisSuccess = new Array(); // 시나리오별 메세지 프레임의 갯수
         var clicklf = new Array();
         var clickedconsole = true;
+        var save_end = new Array(); // 실행 직전 사용자가 end값을 선택했는지 판별
+        
+        
         $(document).ready(function () {
 
             sock = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/api/echo");
@@ -181,8 +184,8 @@
             }
             for (var i = 0; i < testResult.length; i++) {
                 deleteGlobalValue("Scenarioinfo : " + testResult[i]);
+                save_end[i]=false; //배열 초기화
             }
-
             set_tab("left", testResult);
             set_tab("right", testResult);
             lselect = testResult[0];
@@ -401,12 +404,13 @@
 
             //실행 버튼 클릭시 이벤트
             $("#excutionbtn").click(function () {
+            	$(".datepicker").css("border","");
+            	$(".datepicker").attr('disabled', true);
                 requests.splice(0, requests.length);
                 var scenData;
                 var eqmaincontent = new Array();
                 var eqcounting = new Array();
                 var tryisnotnull = true;
-                console.log("실행됨");
                 testResult.forEach(function (e, i) {
                     console_data.push(new Array);
                     console_data[i].push(e);
@@ -429,8 +433,23 @@
                 if (tryisnotnull == true) {
                     countScenario = eqmaincontent.length;
                     for (var i = 0; i < eqmaincontent.length; i++) {
+                    	var com_index_int = get_index(eqmaincontent[i].comport,testResult);
                         var s_dt = get_watch("s", eqmaincontent[i].comport);
-                        var e_dt = get_watch("e", eqmaincontent[i].comport);
+                        var e_dt = 0;
+                        console.log(save_end);
+                        if(save_end[com_index_int]){ //사용자가 날짜를 셋팅하지 않았다면 0을 넣음
+                        	e_dt = get_watch("e", eqmaincontent[i].comport);
+                        	save_end[com_index_int]=false;
+                        }else{
+                        	e_dt = 0;
+                        	save_end[com_index_int]=false;
+                        }
+                        console.log(s_dt+"!!"+e_dt);
+                        if(s_dt!=0||e_dt!=0){
+                        	
+                        	$(" ." + eqmaincontent[i].comport + " .console").append("<div class = ''> 예약 시간 : "+s_dt+" ~ "+e_dt
+                                    + "</div>");
+                        }
                         con_del("." + eqmaincontent[i].comport + " ");
                         var trycounting = $("#left ." + eqmaincontent[i].comport).find('.excutioncount').val();
                         eqcounting.push(trycounting);
@@ -459,6 +478,8 @@
                 //console.log(requests);
                 sock.send(JSON.stringify(requests));
             });
+            
+            
 
             function get_watch(s, com) {
                 var date;
@@ -510,6 +531,14 @@
             });
         });/*document load 끝!*/
 
+     	// a가 배열 b의 몇번째인지 반환
+        function get_index(a,b){
+        	for(var i=0;i<b.length;i++){
+        		if(a==b[i]) return i;
+        	}
+        	return -1;
+        }
+        
         function dragAndDrawHeight() { 	// .draw, .drag div 사이즈 조정
             var h = $(".tab_body").innerHeight() - $(".front_body").innerHeight() - $(".console").innerHeight();
             $(".draw").height(h * 0.65);
@@ -551,6 +580,7 @@
                 } else {
                     $(".excutioncount").attr('disabled', false);
                 }
+                $(".datepicker").attr('disabled', false);
                 excutionscenario = true;
         }
 
@@ -619,7 +649,7 @@
                 text = " " + result.scenarioName + " " + result.resultMessage;
                 if (result.resultMessage != "OK") color = "red"
                 else color = "green";
-            } else if (resultMessage == "MessageFrame") { // 메세지프레임
+            } else if (resultMessage == "MessageFrame") { // 메세지 프레임
                 var accrue = new Array();
                 var temp = 0;
                 result.componentsLength.forEach(function (e, i) {
@@ -650,19 +680,13 @@
                 var text = name + " | " + length + " | " + result.resultMessage;
                 indexCk = true;
             } else if (resultMessage == "Start") {
-                console.log("시작");
                 text = "START";
                 init_DisSuccess(result.port);
                 $(" ." + result.port).find(".s_datepicker").val(date);
-                // 여기서 스타트 찍기
-                //    result.port;
-                //    result.Resultdate -> time으로 쓰길
             } else { // resultMessage == "End"
-                //여기서 버튼 바꾸기
                 text = "END"
                 $(" ." + result.port).find(".e_datepicker").val(date);
                 countScenario--;
-                console.log("끝 / " + result.port.toString());
                 if (countScenario == 0) {
                     stopexcution();
                 }
@@ -674,16 +698,6 @@
                 var place = "." + com
                 $(place).find("hr").css('border','');
                 $(place).find(".arrow").css('color','');
-            }
-
-            function set_watch(s, com, time) {
-                var target = " ." + com + " " + s + "_timepicker";
-                var sap = time.split(':');
-                console.log(target);
-                //console.log($(target).find(".fugit-hours").length);
-                $(target).find(".fugit-hours").text(sap[0]);
-                $(target).find(".fugit-minutes").text(sap[1]);
-                $(target).find(".fugit-seconds").text(sap[2]);
             }
 
             if (indexCk == true) {
@@ -824,6 +838,7 @@
         function con_del(side) {
             $(side + '.console .consoleText').remove();
             $(side + '.statistic *').val("");
+            $(side + ".datepicker").css("border","");
         }
 
       //포커스 이벤트
@@ -913,6 +928,7 @@
         function set_tab(side, comport) {
             var use = "#" + side + " ";
             var i = 1;
+            var testResult = comport;
             comport.forEach(function (com) {
                 var comport = use + "." + com + " ";
                 var head = "<li class ='" + side + "'><a href='" + comport + "'>" + com + "</a></li>";
@@ -941,7 +957,6 @@
                 $(comport + ".console").append("<button class = 'del conDel " + side + "' >x</button>");
                 $(comport + " .console").append(console);
                 i++;
-
                 var statistic =
                     "<label class='col-form-label' > time :</label><input type='text' class='" + com + " datepicker s_datepicker' id = 's_date' name='date'>"
                     + "<label class='col-form-label' > ~ </label><input type='text' class='" + com + " datepicker e_datepicker' id = 'e_date' name='date'>"
@@ -953,8 +968,8 @@
                     + "<label class='col-form-label' > fail : </label><input type='text'  class='number ' id = 'f_message' disabled='true'>"
                     + "<label class='col-form-label' > total : </label><input type='text'  class='number ' id = 't_message' disabled='true'>";
                 $(comport + " .statistic").append(statistic);
-
-                $('.datepicker').daterangepicker({
+            })
+            $('.datepicker').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
                     timePicker: true,
@@ -968,19 +983,23 @@
                         cancelLabel: 'Clear'
                     }
                 });
-                $('.datepicker').val('');
+            $('.datepicker').val('');
                 $('.datepicker').on('cancel.daterangepicker', function (ev, picker) {
                     //do something, like clearing an input
                     var select = clicked_class = $(this).attr("class").split(' ');
                     $("." + select[0] + " ." + select[2]).val("");
+                    $(this).css("border","");
                 });
 
                 $('.datepicker').on('apply.daterangepicker', function (ev, picker) {
-                    var select = clicked_class = $(this).attr("class").split(' ');
+                	$(this).css("border","solid skyblue");
+                    var select = $(this).attr("class").split(' ');
                     var date = $(this).val();
                     $("." + select[0] + " ." + select[2]).val(date);
+                    if($(this).attr("id")=="e_date"){
+                    	save_end[get_index(select[0],testResult)] = true;
+                    }
                 });
-            })
             //When page loads...
             $(use + ".tab_body").hide(); //Hide all content
             $(use + " ul.tab_head_list li:first").addClass("active").show(); //Activate first tab
