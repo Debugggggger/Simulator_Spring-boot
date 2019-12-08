@@ -80,39 +80,8 @@
         var update_eqinfo = true;
         var targetEq = '';
         var _browserState = 'unknown';
-        
+
         $(document).ready(function () {
-            $("#testButton").click(function (){
-                var formData = new FormData();
-                var files = document.getElementById("fileTest").files;
-
-                // formData.append("files", files);
-                for(var idx=0; idx<files.length; idx++) {
-                    formData.append("files", files[idx]);
-                }
-
-                $.ajax({
-                    url: '/api/file/testFileSave',
-                    type: 'POST',
-                    enctype: "multipart/form-data",
-                    // async: false,
-                    data: formData,
-                    contentType : false,
-                    processData : false,
-                    success: function (data) {
-                        result = data;
-                        console.log(result);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        result = {
-                            "code": jqXHR.status,
-                            "message": "Bad",
-                            "data": jqXHR.responseText
-                        };
-                        console.log(result);
-                    }
-                });
-            });
             cardHeight();
             $("#updateeqsetting").hide();
             $("#inserteqsetting").show();
@@ -339,10 +308,10 @@
                         if (result.code == 200) {
 							deleteGlobalValue("Eq : " + clickname);
 							eqList.splice(eqList.indexOf(clickname), 1);
-							
+
 							var eqNamebtnTxt = $('.eqNamebtn').find('button#' + clickname).text();
 							var selectTxt = $("select#eqSelect option[value='" + clickname + "']").val();
-												
+
 							$('.eqNamebtn').find('button#' + clickname).remove();
 	                        $("#eqfirstsetting *").remove();
 	                        alert("삭제 되었습니다.");
@@ -352,7 +321,7 @@
 							$(".contextmenu").hide();
 							// select test == button 이면 삭제하고 select index 1 로 바꾸고 eqname 바꾸기
 							if (eqNamebtnTxt == selectTxt) {
-								$("#eqSelect option:eq(0)").prop("selected", true);							
+								$("#eqSelect option:eq(0)").prop("selected", true);
 								setCookie("eq : eqName", JSON.stringify({"eqName": $("#eqSelect option:eq(0)").val()}), 1);
 							}
                         } else {
@@ -490,7 +459,7 @@
                         clicked_id='';
                     }
                 });
-                
+
                 $('#' + clicked_id).contextmenu(function (e) {
                     $(".eqNamebtn").find('button').css({'background-color': '#f7f7f7', 'color': 'black'});
                     $(".eqNamebtn").find('#' + clicked_id).css({'background-color': '#66696B', 'color': 'white'});
@@ -550,10 +519,10 @@
                         if (result.code == 200) {
 							deleteGlobalValue("Eq : " + clicked_id);
 							eqList.splice(eqList.indexOf(clicked_id), 1);
-							
+
 							var eqNamebtnTxt = $('.eqNamebtn').find('button#' + clicked_id).text();
 							var selectTxt = $("select#eqSelect option[value='" + clicked_id + "']").val();
-							
+
 							$('.eqNamebtn').find('button#' + clicked_id).remove();
 	                        $("#eqfirstsetting *").remove();
 	                        alert("삭제 되었습니다.");
@@ -562,7 +531,7 @@
 							$(".contextmenu").hide();
 							// select test == button 이면 삭제하고 select index 1 로 바꾸고 eqname 바꾸기
 							if (eqNamebtnTxt == selectTxt) {
-								$("#eqSelect option:eq(0)").prop("selected", true);							
+								$("#eqSelect option:eq(0)").prop("selected", true);
 								setCookie("eq : eqName", JSON.stringify({"eqName": $("#eqSelect option:eq(0)").val()}), 1);
 							}
                         } else {
@@ -570,7 +539,7 @@
                         }
                     }
                 });
-                
+
                 // clone
                 $("#btnClone").click(function () {
                     // 이름과 중복 검사
@@ -579,10 +548,10 @@
                         if(eqList[i].name == targetEq + '_' + idx) idx++;
                     }
                     var newName = targetEq + '_' + idx;
-                    
+
                     var eqData = JSON.parse(getGlobalValue("Eq : " + targetEq));
                     eqData.name = newName;
-    
+
                     $("#eqfirstsetting *").remove();
                     $("#updateeqsetting").hide();
                     $("#inserteqsetting").show();
@@ -605,8 +574,8 @@
                     $("#SB option:eq(" + eqData.stopBit + ")").attr("selected", "selected");
                     clickname="";
                 });
-                
-                
+
+
             }
         }
 
@@ -617,23 +586,28 @@
 
         function openTextFile() {
             var input = document.createElement("input");
-            var result;
-            input.type = "file";
-            input.accept = ".xml";
+            input.setAttribute("type", "file");
+            input.setAttribute("id", "importFile");
+            input.setAttribute("name", "files");
+            input.setAttribute("accept", ".xml");
 
-            input.click();
-            input.onchange = function (event) {
+            document.getElementById("hidden-div").appendChild(input);
+            var importFile = document.getElementById("importFile");
+
+            importFile.click();
+            importFile.onchange =function (ev) {
                 var reader = new FileReader();
-                reader.readAsText(event.target.files[0], "utf-8");
+                reader.readAsText(ev.target.files[0], "utf-8");
                 reader.onload = function () {
-                    result = reader.result;
+                    var response = ajaxFile(reader.result, "import");
+                    alert(response.message);
                 };
-                console.log(result);
-    
-                // result = ajaxFile(reader.result, "import");
-            };
+
+                importFile.remove();
+            }
+            importFile.remove();
         }
-        
+
         (function checkBrowser(){
             var agent = navigator.userAgent.toLowerCase();
             if(agent.indexOf("chrome")!=-1){_browserState="Chrome";}
@@ -657,7 +631,7 @@
             else{
                 var a = document.createElement("a"),
                         file = new Blob([contents], { type: "text/plain;charset=utf-8" });
-        
+
                 if (window.navigator.msSaveOrOpenBlob) // IE10+
                     window.navigator.msSaveOrOpenBlob(file, filename);
                 else { // Others
@@ -665,7 +639,7 @@
                     a.href = url;
                     a.download = filename;
                     document.body.appendChild(a);
-            
+
                     a.click();
                     setTimeout(function () {
                         document.body.removeChild(a);
@@ -674,10 +648,10 @@
                 }
             }
         }
-        
+
         function exportXml(name) {
             var response = ajaxFile(name, "export");
-    
+
             switch (response.code) {
                 case 200:
                     _downloadEx(name+".xml",response.data);
@@ -698,8 +672,6 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-    <input type="file" id = "fileTest" name = "files" value = "파일 선택" multiple>
-    <input type="button" id = "testButton" value="TestTest">
     <!-- common nav -->
     <%@include file="include/common_nav.jsp" %>
     <!-- /.common nav -->
@@ -774,5 +746,6 @@
     <li><a id="btnExport">Export</a></li>
     <li><a id="btnDelete">Delete</a></li>
 </ul>
+<div id="hidden-div"></div>
 </body>
 </html>

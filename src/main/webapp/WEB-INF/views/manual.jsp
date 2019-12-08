@@ -87,6 +87,22 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+   // load();
+   function load() {
+      $.ajax({
+         url: '/api/file/manualFileList',
+         type: 'GET',
+         success: function (data) {
+            if(data.length > 0) {
+               data.forEach(function (name) {
+                  $("#manualListTable tbody").append("<tr><th><input type='checkbox' class ='fileChbox'></th><th>"+name+"</th> </tr>")
+               })
+            }
+            alert(data.message);
+         }
+      });
+   }
+
     $('#manualListTable').DataTable( {
         deferRender:    true,
         scrollY:        300,
@@ -103,31 +119,71 @@ $(document).ready(function() {
             $(".fileChbox").prop('checked', false);
 		}
 	});
+
     /* 파일명 dblclick 하면 download */
     $(document).on("dblclick", ".manual", function() {	
         console.log($(this).text());
+        alert($(this).text())
 	});
     
     $(document).on("click", "#manualUploadBtn", function() {
+       var input = document.createElement("input");
+       input.setAttribute("type", "file");
+       input.setAttribute("name", "files");
+       input.setAttribute("multiple", "multiple");
+       input.setAttribute("id", "uploadFiles");
 
+       document.getElementById("hidden-div").appendChild(input);
+       var uploadFiles = document.getElementById("uploadFiles");
+
+       uploadFiles.click();
+       uploadFiles.onchange =function (ev) {
+          var formData = new FormData();
+          var files = document.getElementById("uploadFiles").files;
+
+          for(var idx=0; idx<files.length; idx++) {
+             formData.append("files", files[idx]);
+          }
+
+          $.ajax({
+             url: '/api/file/uploadFiles',
+             type: 'POST',
+             enctype: "multipart/form-data",
+             data: formData,
+             contentType : false,
+             processData : false,
+             success: function (data) {
+                alert(data.message);
+             }
+          });
+
+          uploadFiles.remove();
+       }
 	});
-    
+
     $(document).on("click", "#manualDownloadBtn", function() {
         var fileNameArr = new Array();
-        
-        $("tbody").find("tr").each(function() {          
+
+        $("tbody").find("tr").each(function() {
             var tr = $(this);
             var td = tr.children();
-            
+
             if ($(this).find(".fileChbox").is(":checked")) {	// 선택한 파일이름들 배열에 저장
                 fileNameArr.push(td.eq(1).text());
             }
         });
-          
+
         if (fileNameArr.length > 0) {	// 선택한 파일이름이 있으면
             console.log(fileNameArr);
         }
    });
+
+    function manualDownload(fileName) {
+       var a = document.createElement("a");
+       a.setAttribute("href", "/api/file/manualDownload?fileName="+fileName);
+       a.click();
+       a.remove();
+    }
 });
 
 </script>
@@ -152,50 +208,6 @@ $(document).ready(function() {
             <tbody>
                <tr>
                   <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>asdf</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>ssss</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
-                  <th>gggg</th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" class ="fileChbox"></th>
                   <th>gggg</th>
                </tr>
             </tbody>
@@ -206,8 +218,10 @@ $(document).ready(function() {
          <button type="button" class="btn btn-info" id = "manualUploadBtn">Upload</button>
          <button type="button" class="btn btn-info" id ="manualDownloadBtn">Download</button>
       </div>
-         
    </div>
+</div>
+
+<div id="hidden-div">
 </div>
 
 </body>

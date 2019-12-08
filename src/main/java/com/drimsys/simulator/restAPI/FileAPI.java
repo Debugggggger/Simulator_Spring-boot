@@ -4,16 +4,21 @@ import com.drimsys.simulator.dto.Eq;
 import com.drimsys.simulator.dto.JSONResult;
 import com.drimsys.simulator.util.Convert;
 import com.drimsys.simulator.util.File;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
+import static com.drimsys.simulator.util.File.MANUAL_PATH;
 import static com.drimsys.simulator.util.File.XML_PATH;
-import static com.drimsys.simulator.util.File.save;
 
 @RestController
 @RequestMapping(value = "/api/file")
@@ -59,11 +64,10 @@ public class FileAPI{
         return new JSONResult(500, "파일저장에 실패했습니다.", null);
     }
 
-    private JSONResult testFileSave(MultipartFile files) {
-
+    private boolean uploadFile(MultipartFile files) {
         try {
             String name = files.getOriginalFilename();
-            String path = "resource/manual/";
+            String path = MANUAL_PATH;
             byte[] data = files.getBytes();
 
             BufferedOutputStream bs = null;
@@ -75,15 +79,17 @@ public class FileAPI{
                 e.getStackTrace();
             }
 
-            return new JSONResult(200, "Save Success", null);
+            return true;
         }catch (Exception e){
-            e.printStackTrace();
-            return new JSONResult(500, "Save Fail",null);
+            return false;
         }
     }
 
     @RequestMapping(value = "/import", method = RequestMethod.POST)
     public JSONResult importPOST(@RequestBody String request) {
+        if(request == null)  return new JSONResult(500, "파일형식이 맞지 않습니다.", null);
+        if(request.equals(""))  return new JSONResult(500, "파일형식이 맞지 않습니다.", null);
+
         request = Convert.decodeURL(request);
 
         String path = XML_PATH;
@@ -127,11 +133,103 @@ public class FileAPI{
             return new JSONResult(500, "Export Error", e.getMessage());
         }
     }
-    @RequestMapping(value = "/testFileSave", method = RequestMethod.POST)
-    public JSONResult testFileSave(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) {
+
+    @RequestMapping(value = "/uploadFiles", method = RequestMethod.POST)
+    public JSONResult uploadFile(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) {
+        List<Boolean> result = new LinkedList<>();
+        String failureFileName = "";
+
+        int success = 0;
+        int failure = 0;
+
         for(MultipartFile file : files) {
-            testFileSave(file);
+            if ((uploadFile(file))) {
+                success++;
+            } else {
+                failure++;
+                failureFileName += file.getOriginalFilename() + " ";
+            }
         }
-        return null;
+
+        String message = "";
+        if(failure > 0) {
+            message = "성공 : " + success + " / 실패 : " + failure + "[ " + failureFileName + "]";
+        } else {
+            message = "성공 : " + success;
+        }
+
+        return new JSONResult(200, message, null);
+    }
+
+    @RequestMapping(value = "/manualFileList", method = RequestMethod.GET)
+    public List<String> manualFileListGET() {
+        List<String> files = new LinkedList<>();
+
+        for(java.io.File info : FileUtils.listFiles(new java.io.File(MANUAL_PATH), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
+            files.add(info.getName());
+        }
+
+        return files;
+    }
+
+    @RequestMapping(value = "/manualDownload", method = RequestMethod.GET)
+    public void download(String fileName, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("UTF-8");
+
+        //파일 업로드된 경로
+        try{
+            java.io.File file = null;
+            InputStream in = null;
+            OutputStream os = null;
+
+            boolean skip = false;
+            String client = "";
+
+            //파일을 읽어 스트림에 담기
+            try{
+                file = new java.io.File(MANUAL_PATH + fileName);
+                in = new FileInputStream(file);
+            } catch (FileNotFoundException fe) {
+                skip = true;
+            }
+
+            client = request.getHeader("User-Agent");
+
+            //파일 다운로드 헤더 지정
+            response.reset();
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Description", "JSP Generated Data");
+
+            if (!skip) {
+                // IE
+                if (client.indexOf("MSIE") != -1) {
+                    response.setHeader("Content-Disposition", "attachment; filename=\""
+                            + java.net.URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "\\ ") + "\"");
+                    // IE 11 이상.
+                } else if (client.indexOf("Trident") != -1) {
+                    response.setHeader("Content-Disposition", "attachment; filename=\""
+                            + java.net.URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "\\ ") + "\"");
+                } else {
+                    // 한글 파일명 처리
+                    response.setHeader("Content-Disposition",
+                            "attachment; filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO8859_1") + "\"");
+                    response.setHeader("Content-Type", "application/octet-stream; charset=utf-8");
+                }
+                response.setHeader("Content-Length", "" + file.length());
+                os = response.getOutputStream();
+                byte b[] = new byte[(int) file.length()];
+                int leng = 0;
+                while ((leng = in.read(b)) > 0) {
+                    os.write(b, 0, leng);
+                }
+            } else {
+                response.setContentType("text/html;charset=UTF-8");
+                System.out.println("<script language='javascript'>alert('파일을 찾을 수 없습니다');history.back();</script>");
+            }
+            in.close();
+            os.close();
+        } catch (Exception e) {
+            System.out.println("ERROR : " + e.getMessage());
+        }
     }
 }
