@@ -1042,7 +1042,7 @@
             var dateString = "";
             dateString += ("0" + now.getHours()).slice(-2) + ":";
             dateString += ("0" + now.getMinutes()).slice(-2) + ":";
-            dateString += ("0" + now.getSeconds()).slice(-2);
+            dateString += "00";
 
             return dateString;
         }

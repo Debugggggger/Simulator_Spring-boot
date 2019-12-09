@@ -613,6 +613,11 @@
                     processData : false,
                     success: function (data) {
                         alert(data.message);
+                        location.reload();
+                        // console.log(data);
+                        // for (var i = 0; i < data.data.length; i++) {
+                        //     $(".eqNamebtn").append("<button type='button' class='btn col-sm-2 btn-block btn-default eqbtn' id = '" + data.data + "' onmousedown='clicked(this.id)'>" + data.data + "</button>");
+                        // }
                     }
                 });
 

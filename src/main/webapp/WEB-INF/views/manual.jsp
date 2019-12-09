@@ -97,7 +97,6 @@ $(document).ready(function() {
 			url: '/api/file/manualFileList',
 			type: 'GET',
 			success: function (data) {
-			    console.log(data);
 				if(data.length > 0) {	    
 					data.forEach(function (name) {
 					    var dataArr = new Array();
@@ -166,16 +165,16 @@ $(document).ready(function() {
              contentType : false,
              processData : false,
              success: function (data) {
-                 console.log(data);
-                 if(data.length > 0) {	    
- 					data.forEach(function (name) {
- 					   /*  if (name.indexOf(".") == -1) {	// .jpg 확장자 붙이기
- 	                     dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", data + ".jpg"] ).draw( false );
+                 console.log(data.data);
+                 if(data.data.length > 0) {	    
+                     data.data.forEach(function (name) {
+ 					   if (name.indexOf(".") == -1) {	// .jpg 확장자 붙이기
+ 	                     dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", name + ".jpg"] ).draw( false );
 	 				    } else {
-	 				        dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", data] ).draw( false );
-	 				    }	 */
-				    }
-				}              
+	 				        dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", name] ).draw( false );
+	 				    }
+				  });
+				}            
              }
           });
 
@@ -194,8 +193,8 @@ $(document).ready(function() {
                 fileNameArr.push(td.eq(1).text());
             }
         });
-        
         for (var i = 0; i < fileNameArr.length; i++) {
+            console.log(fileNameArr[i]);
             manualDownload(fileNameArr[i]);
     	}
    });
