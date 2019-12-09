@@ -622,11 +622,11 @@
             , hours = parseInt((result.runtime/(1000*60*60))%24);
             var runtime = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
             $(" ." + result.port).find(".runtime").val(runtime);
-            $(" ." + result.port).find("#s_scen").val(s_s+"("+(s_s/t_s)+")");
-            $(" ." + result.port).find("#f_scen").val(f_s+"("+(f_s/t_s).toFixed(2)+")");
+            $(" ." + result.port).find("#s_scen").val(s_s+"("+(s_s/t_s*100).toFixed(2)+"%)");
+            $(" ." + result.port).find("#f_scen").val(f_s+"("+(f_s/t_s*100).toFixed(2)+"%)");
             $(" ." + result.port).find("#t_scen").val(t_s);
-            $(" ." + result.port).find("#s_message").val(s_m+"("+(s_m/t_m).toFixed(2)+")");
-            $(" ." + result.port).find("#f_message").val(f_m+"("+(f_m/t_m).toFixed(2)+")");
+            $(" ." + result.port).find("#s_message").val(s_m+"("+(s_m/t_m*100).toFixed(2)+"%)");
+            $(" ." + result.port).find("#f_message").val(f_m+"("+(f_m/t_m*100).toFixed(2)+"%)");
             $(" ." + result.port).find("#t_message").val(t_m);
             var date = result.resultDate;
             // $(" ." + result.port + " .console").append("<div class = 'consoleText console" + index + " " + result.port + " " + resultMessage + "' style='background:" + color + "'>"
