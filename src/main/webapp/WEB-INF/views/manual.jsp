@@ -99,12 +99,7 @@ $(document).ready(function() {
 			success: function (data) {
 				if(data.length > 0) {	    
 					data.forEach(function (name) {
-					    var dataArr = new Array();
-					    if (name.indexOf(".") == -1) {	// .jpg 확장자 붙이기
-					        dataArr = ["<input type='checkbox' class ='fileChbox'>", name + ".jpg"];
-					    } else {
-					        dataArr = ["<input type='checkbox' class ='fileChbox'>", name];
-					    }	    
+					    var dataArr = dataArr = ["<input type='checkbox' class ='fileChbox'>", name];    
 					    fileNameData.push(dataArr);
 					});
 				}
@@ -168,11 +163,7 @@ $(document).ready(function() {
                  console.log(data.data);
                  if(data.data.length > 0) {	    
                      data.data.forEach(function (name) {
- 					   if (name.indexOf(".") == -1) {	// .jpg 확장자 붙이기
- 	                     dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", name + ".jpg"] ).draw( false );
-	 				    } else {
-	 				        dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", name] ).draw( false );
-	 				    }
+                         dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", name] ).draw( false );
 				  });
 				}            
              }
@@ -196,7 +187,7 @@ $(document).ready(function() {
        for (var i = 0; i < fileNameArr.length; i++) {
           console.log(fileNameArr[i]);
           manualDownload(fileNameArr[i]);
-          sleep(500);
+          sleep(300);
        }
    });
 
