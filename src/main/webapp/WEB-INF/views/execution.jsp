@@ -439,7 +439,6 @@
                     	var com_index_int = get_index(eqmaincontent[i].comport,testResult);
                         var s_dt = get_watch("s", eqmaincontent[i].comport);
                         var e_dt = 0;
-                        console.log(save_end);
                         if(save_end[com_index_int]){ //사용자가 날짜를 셋팅하지 않았다면 0을 넣음
                         	e_dt = get_watch("e", eqmaincontent[i].comport);
                         	save_end[com_index_int]=false;
@@ -447,9 +446,8 @@
                         	e_dt = 0;
                         	save_end[com_index_int]=false;
                         }
-                        console.log(s_dt+"!!"+e_dt);
                         if(s_dt!=0||e_dt!=0){
-                        	$(" ." + eqmaincontent[i].comport + " .console").append("<div class = 'consoletex'> 예약 시간 : "+s_dt+" ~ "+e_dt
+                        	$(" ." + eqmaincontent[i].comport + " .console").append("<div class = 'consoletext'> 예약 시간 : "+s_dt+" ~ "+e_dt
                                     + "</div>");
                         }
                         con_del("." + eqmaincontent[i].comport + " ");
@@ -612,13 +610,24 @@
                 + " totalMessageCount :" + result.totalMessageCount + "<br/>"
                 + " successMessageCount :" + result.successMessageCount;
             color = "blue"
-            $(" ." + result.port).find(".runtime").val(result.runtime);
-            $(" ." + result.port).find("#s_scen").val(result.successScenarioCount);
-            $(" ." + result.port).find("#f_scen").val(result.failedScenarioCount);
-            $(" ." + result.port).find("#t_scen").val(result.totalScenarioCount);
-            $(" ." + result.port).find("#s_message").val(result.successMessageCount);
-            $(" ." + result.port).find("#f_message").val(result.failedMessageCount);
-            $(" ." + result.port).find("#t_message").val(result.totalMessageCount);
+            s_s = result.successScenarioCount;
+            f_s = result.failedScenarioCount;
+            t_s = result.totalScenarioCount;
+            s_m = result.successMessageCount;
+            f_m = result.failedMessageCount;
+            t_m = result.totalMessageCount;
+            var milliseconds = parseInt((result.runtime%1000)/10)
+            , seconds = parseInt((result.runtime/1000)%60)
+            , minutes = parseInt((result.runtime/(1000*60))%60)
+            , hours = parseInt((result.runtime/(1000*60*60))%24);
+            var runtime = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+            $(" ." + result.port).find(".runtime").val(runtime);
+            $(" ." + result.port).find("#s_scen").val(s_s+"("+(s_s/t_s)+")");
+            $(" ." + result.port).find("#f_scen").val(f_s+"("+(f_s/t_s).toFixed(2)+")");
+            $(" ." + result.port).find("#t_scen").val(t_s);
+            $(" ." + result.port).find("#s_message").val(s_m+"("+(s_m/t_m).toFixed(2)+")");
+            $(" ." + result.port).find("#f_message").val(f_m+"("+(f_m/t_m).toFixed(2)+")");
+            $(" ." + result.port).find("#t_message").val(t_m);
             var date = result.resultDate;
             // $(" ." + result.port + " .console").append("<div class = 'consoleText console" + index + " " + result.port + " " + resultMessage + "' style='background:" + color + "'>"
             //     + time + text + "</div>");
@@ -962,7 +971,7 @@
                 var statistic =
                     "<label class='col-form-label' > time :</label><input type='text' class='" + com + " datepicker s_datepicker' id = 's_date' name='date'>"
                     + "<label class='col-form-label' > ~ </label><input type='text' class='" + com + " datepicker e_datepicker' id = 'e_date' name='date'>"
-                    + "<label class='col-form-label' > total run : </label>"+"<input type='text' class='runtime number' id ='date' disabled='true'></br>"
+                    + "<label class='col-form-label' > total run : </label>"+"<input type='text' class='runtime' id ='date' disabled='true'></br>"
                     + "<label class='col-form-label' > [ Scenario ] success : </label><input type='text' class='number' id = 's_scen' disabled='true'>"
                     + "<label class='col-form-label' > fail : </label><input type='text'  class='number ' id = 'f_scen' disabled='true'>"
                     + "<label class='col-form-label' > total : </label><input type='text'  class='number ' id = 't_scen' disabled='true'></br>"
