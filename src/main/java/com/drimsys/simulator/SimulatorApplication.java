@@ -55,7 +55,7 @@ public class SimulatorApplication {
 
 	private static void start(ConfigurableApplicationContext[] app, String[] args) {
 		try {
-			monitering(TOMCAT_SOCKET);
+//			monitering(TOMCAT_SOCKET);
 			app[0] = SpringApplication.run(SimulatorApplication.class, args);
 			JOptionPane.showMessageDialog(null, "서버가 실행되었습니다.");
 		} catch (Exception e) {
@@ -74,13 +74,13 @@ public class SimulatorApplication {
 	}
 
 	public static void main(String[] args) {
-		ServerSocket serverSocket;
-		try {
-			serverSocket = new ServerSocket(APP_SOCKET);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "프로그램이 이미 구동중 입니다.");
-			System.exit(0);
-		}
+//		ServerSocket serverSocket;
+//		try {
+//			serverSocket = new ServerSocket(APP_SOCKET);
+//		} catch (Exception e) {
+//			JOptionPane.showMessageDialog(null, "프로그램이 이미 구동중 입니다.");
+//			System.exit(0);
+//		}
 
 		final ConfigurableApplicationContext[] app = {null};
 		initDir();
