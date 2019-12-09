@@ -87,30 +87,43 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-   // load();
-   function load() {
-      $.ajax({
-         url: '/api/file/manualFileList',
-         type: 'GET',
-         success: function (data) {
-            if(data.length > 0) {
-               data.forEach(function (name) {
-                  $("#manualListTable tbody").append("<tr><th><input type='checkbox' class ='fileChbox'></th><th>"+name+"</th> </tr>")
-               })
-            }
-            alert(data.message);
-         }
-      });
-   }
-
-    $('#manualListTable').DataTable( {
-        deferRender:    true,
-        scrollY:        300,
-        scrollCollapse: true,
-        scroller:       true,
-        stateSave:      true,
-        dom: '<"top"f>t'
-    });
+    var fileNameData = new Array();
+    var dataTable;
+    
+	load();
+	
+	function load() {
+		$.ajax({
+			url: '/api/file/manualFileList',
+			type: 'GET',
+			success: function (data) {
+			    console.log(data);
+				if(data.length > 0) {	    
+					data.forEach(function (name) {
+					    var dataArr = new Array();
+					    if (name.indexOf(".") == -1) {	// .jpg 확장자 붙이기
+					        dataArr = ["<input type='checkbox' class ='fileChbox'>", name + ".jpg"];
+					    } else {
+					        dataArr = ["<input type='checkbox' class ='fileChbox'>", name];
+					    }	    
+					    fileNameData.push(dataArr);
+					});
+				}
+				
+				if(fileNameData) {
+				    dataTable = $('#manualListTable').DataTable( {
+				        data: fileNameData,
+				        deferRender:    true,
+				        scrollY:        300,
+				        scrollCollapse: true,
+				        scroller:       true,
+				        stateSave:      true,
+				        dom: '<"top"f>t'
+				    });
+				}
+			}
+		});
+	}
     
     $(document).on("change", "#allChBox", function() {
         if ($("#allChBox").is(":checked")) {
@@ -121,13 +134,13 @@ $(document).ready(function() {
 	});
 
     /* 파일명 dblclick 하면 download */
-    $(document).on("dblclick", ".manual", function() {	
+    $(document).on("dblclick", "#manualListTable tr", function() {	
         console.log($(this).text());
-        alert($(this).text())
+        manualDownload($(this).text());
 	});
     
     $(document).on("click", "#manualUploadBtn", function() {
-       var input = document.createElement("input");
+	   var input = document.createElement("input");
        input.setAttribute("type", "file");
        input.setAttribute("name", "files");
        input.setAttribute("multiple", "multiple");
@@ -153,7 +166,16 @@ $(document).ready(function() {
              contentType : false,
              processData : false,
              success: function (data) {
-                alert(data.message);
+                 console.log(data);
+                 if(data.length > 0) {	    
+ 					data.forEach(function (name) {
+ 					   /*  if (name.indexOf(".") == -1) {	// .jpg 확장자 붙이기
+ 	                     dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", data + ".jpg"] ).draw( false );
+	 				    } else {
+	 				        dataTable.row.add( ["<input type='checkbox' class ='fileChbox'>", data] ).draw( false );
+	 				    }	 */
+				    }
+				}              
              }
           });
 
@@ -172,10 +194,10 @@ $(document).ready(function() {
                 fileNameArr.push(td.eq(1).text());
             }
         });
-
-        if (fileNameArr.length > 0) {	// 선택한 파일이름이 있으면
-            console.log(fileNameArr);
-        }
+        
+        for (var i = 0; i < fileNameArr.length; i++) {
+            manualDownload(fileNameArr[i]);
+    	}
    });
 
     function manualDownload(fileName) {
