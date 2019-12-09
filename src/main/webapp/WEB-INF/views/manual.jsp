@@ -238,8 +238,5 @@ $(document).ready(function() {
    </div>
 </div>
 
-<div id="hidden-div">
-</div>
-
 </body>
 </html>

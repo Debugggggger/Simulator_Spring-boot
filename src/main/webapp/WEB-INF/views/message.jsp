@@ -200,7 +200,13 @@
         $("#plusBtn").click(function() {
             madeCmpTable();
         });
-         
+        
+        /* 아스키 버튼 누르면 아스키테이블 보여줌 */
+        $("#ascii").click(function() {
+            var url = "/ascii";  
+            window.open(url, "_blank", "width = 460, height = 600, resizable=no"); 
+        });
+            
         /* component search */        
         $(document).on("keyup search", "#searchCmp", function() {
             searchLogic("searchCmp", "cmp");
