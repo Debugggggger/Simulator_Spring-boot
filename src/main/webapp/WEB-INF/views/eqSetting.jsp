@@ -127,9 +127,9 @@
                         var eq = {
                             "name": eqList[i].name,
                             "electricalInterface": eqList[i].electricalInterface,
-                            "baudrate": eqList[i].baudrate,
-                            "dataLength": eqList[i].dataLength,
-                            "stopBit": eqList[i].stopBit,
+                            "baudRate": eqList[i].baudRate,
+                            "dataBits": eqList[i].dataBits,
+                            "stopBits": eqList[i].stopBits,
                             "parity": eqList[i].parity,
                             "flowControl": eqList[i].flowControl
                         }
@@ -151,7 +151,7 @@
                 maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' >" + "</td>" + "</tr>"
                     + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
                     + "<tr class='eqBR' >" + "<td>Baud Rate</td>" + "<td>" + "<select id='BR'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
-                    + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
+                    + "<tr class='eqDB'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DB'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
                     + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                     + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                     + " <tr class='eqFC' >" + " <td>FlowControl</td>" + "<td>" + "<select id='FC'><option>None</option><option>Xon/Xoff</option><option>RTS/CTS</option></select>" + "</td>" + "</tr>"+"</tbody>";
@@ -178,7 +178,7 @@
                     else{
                         var EI = $("#EI option:selected").text();
                         var BR = $("#BR option:selected").val();
-                        var DL = $("#DL option:selected").val();
+                        var DB = $("#DB option:selected").val();
                         var SB = $("#SB option").index($("#SB option:selected"));
                         var PR = $("#PR option").index($("#PR option:selected"));
                         var FC = $("#FC option:selected").val();
@@ -186,9 +186,9 @@
                         var eq = {
                             "name": eqN,
                             "electricalInterface": EI,
-                            "baudrate": Number(BR),
-                            "dataLength": Number(DL),
-                            "stopBit": SB+1,
+                            "baudRate": Number(BR),
+                            "dataBits": Number(DB),
+                            "stopBits": SB+1,
                             "parity": PR,
                             "flowControl": FC,
                             "targetEq":targetEq
@@ -236,7 +236,7 @@
                 } else {
                     var eiinfo = $("#eiinfoSelect option:selected").text();
                     var brinfo = $("#brinfoSelect option:selected").val();
-                    var dlinfo = $("#dlinfoSelect option:selected").val();
+                    var dbinfo = $("#dbinfoSelect option:selected").val();
                     var sbinfo = $("#sbinfoSelect option").index($("#sbinfoSelect option:selected"));
                     var prinfo = $("#prinfoSelect option").index($("#prinfoSelect option:selected"));
                     var fcinfo = $("#fcinfoSelect option:selected").val();
@@ -246,7 +246,7 @@
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN'  value = '" + clickname + "' disabled >" + "</td>" + "</tr>"
                         + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
                         + "<tr class='eqBR' >" + "<td>Baud Rate</td>" + "<td>" + "<select id='BR'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
-                        + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
+                        + "<tr class='eqDB'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DB'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
                         + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                         + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                         + " <tr class='eqFC' >" + " <td>FlowControl</td>" + "<td>" + "<select id='FC'><option>None</option><option>Xon/Xoff</option><option>RTS/CTS</option></select>" + "</td>" + "</tr>" + "</tbody>";
@@ -254,7 +254,7 @@
                     // 패리티 선택 만들기
                     $("#PR option:eq(" + prinfo + ")").attr("selected", "selected");
                     $("#EI").val(eiinfo).attr("selected", "selected");
-                    $("#DL").val(dlinfo).attr("selected", "selected");
+                    $("#DB").val(dbinfo).attr("selected", "selected");
                     $("#SB option:eq(" + sbinfo + ")").attr("selected", "selected");
                     $("#BR").val(brinfo).attr("selected", "selected");
                     $("#BR").val(fcinfo).attr("selected", "selected");
@@ -336,16 +336,16 @@
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' value="+eqData.name+">" + "</td>" + "</tr>"
                         + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>" + "</tr>"
                         + "<tr class='eqBR' >" + "<td>Baud Rate</td>" + "<td>" + "<select id='BR'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
-                        + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td>" +"<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                        + "<tr class='eqDB'>" + "<td>Data Bits</td>" + "<td>" +"<select id='DB'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
                         + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>"+"</td>" + "</tr>"
                         + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                         + " <tr class='eqFC' >" + " <td>FlowControl</td>" + "<td>" +"<select id='FC'><option>None</option><option>Xon/Xoff</option><option>RTS/CTS</option></select>" +"</td>" + "</tr>" + "</tbody>";
                     $("#eqfirstsetting").append(maintext);
 
                     $("#PR option:eq(" + eqData.parity + ")").attr("selected", "selected");
-                    $("#SB option:eq(" + (eqData.stopBit-1) + ")").attr("selected", "selected");
-                    $("#DL").val(eqData.dataLength).attr("selected", "selected");
-                    $("#BR").val(eqData.baudrate).attr("selected", "selected");
+                    $("#SB option:eq(" + (eqData.stopBits-1) + ")").attr("selected", "selected");
+                    $("#DB").val(eqData.dataBits).attr("selected", "selected");
+                    $("#BR").val(eqData.baudRate).attr("selected", "selected");
                     $("#EI").val(eqData.electricalInterface).attr("selected", "selected");
                     $("#FC").val(eqData.flowControl).attr("selected", "selected");
                     clickname="";
@@ -371,12 +371,12 @@
             var eqN = $("#eqN").val();
             var EI = $("#EI").val();
             var BR = $("#BR").val();
-            var DL = $("#DL").val();
+            var DB = $("#DB").val();
             var SB = $("#SB").val();
             var PR = $("#PR").val();
             var FC = $("#FC").val();
 
-            if (eqN == "" || EI == "" || BR == "" || DL == "" || SB == "" || PR == "" || FC == "" || BC == "") {
+            if (eqN == "" || EI == "" || BR == "" || DB == "" || SB == "" || PR == "" || FC == "" ) {
                 alert("공백이 있습니다. 모든 값을 입력해주세요.");
                 return false;
             }
@@ -399,7 +399,7 @@
                         var text = "<tbody class='clickinfo'>" +
                             "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td id='eiinfo'>"+"<select id='eiinfoSelect'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>"+ "</tr>"
                             + "<tr class='eqBR' >" + "<td>Baud Rate</td>" + "<td id='brinfo'>"+"<select id='brinfoSelect'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
-                            + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td id='dlinfo'>" +"<select id='dlinfoSelect'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                            + "<tr class='eqDB'>" + "<td>Data Bits</td>" + "<td id='dbinfo'>" +"<select id='dbinfoSelect'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
                             + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td id='sbinfo'>"+"<select id='sbinfoSelect'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                             + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td id='prinfo'><select id='prinfoSelect'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select></td>" + " </tr>"
                             + " <tr class='eqFC' >" + " <td>FlowControl</td>" + "<td id='fcinfo'>" + "<select id='fcinfoSelect'><option>None</option><option>Xon/Xoff</option><option>RTS/CTS</option></select>" + "</td>" + "</tr>" + "</tbody>";
@@ -411,13 +411,13 @@
                         $("#eiinfoSelect").val(eqData.electricalInterface).attr("selected", "selected");
                         $('#eiinfoSelect').attr('disabled', 'true');
 
-                        $("#dlinfoSelect").val(eqData.dataLength).attr("selected", "selected");
-                        $('#dlinfoSelect').attr('disabled', 'true');
+                        $("#dbinfoSelect").val(eqData.dataBits).attr("selected", "selected");
+                        $('#dbinfoSelect').attr('disabled', 'true');
 
-                        $("#sbinfoSelect option:eq(" + (eqData.stopBit-1) + ")").attr("selected", "selected");
+                        $("#sbinfoSelect option:eq(" + (eqData.stopBits-1) + ")").attr("selected", "selected");
                         $('#sbinfoSelect').attr('disabled', 'true');
 
-                        $("#brinfoSelect").val(eqData.baudrate).attr("selected", "selected");
+                        $("#brinfoSelect").val(eqData.baudRate).attr("selected", "selected");
                         $('#brinfoSelect').attr('disabled', 'true');
 
                         $("#fcinfoSelect").val(eqData.flowControl).attr("selected", "selected");
@@ -538,17 +538,17 @@
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' value="+eqData.name+">" + "</td>" + "</tr>"
                             + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>" + "</tr>"
                             + "<tr class='eqBR' >" + "<td>Baud Rate</td>" + "<td>" + "<select id='BR'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
-                            + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                            + "<tr class='eqDB'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DB'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
                             + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>"+"</td>" + "</tr>"
                             + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                             + " <tr class='eqFC' >" + " <td>FlowControl</td>" + "<td>" + "<select id='FC'><option>None</option><option>Xon/Xoff</option><option>RTS/CTS</option></select>"+"</td>" + "</tr>" + "</tbody>";
                     $("#eqfirstsetting").append(maintext);
                     $("#PR option:eq(" + eqData.parity + ")").attr("selected", "selected");
                     $("#EI").val(eqData.electricalInterface).attr("selected", "selected");
-                    $("#BR").val(eqData.baudrate).attr("selected", "selected");
-                    $("#DL").val(eqData.dataLength).attr("selected", "selected");
+                    $("#BR").val(eqData.baudRate).attr("selected", "selected");
+                    $("#DB").val(eqData.dataBits).attr("selected", "selected");
                     $("#FC").val(eqData.flowControl).attr("selected", "selected");
-                    $("#SB option:eq(" + (eqData.stopBit-1) + ")").attr("selected", "selected");
+                    $("#SB option:eq(" + (eqData.stopBits-1) + ")").attr("selected", "selected");
                     clickname="";
                 });
 
