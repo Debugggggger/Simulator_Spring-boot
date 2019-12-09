@@ -161,7 +161,7 @@
                 $(".eqNamebtn").find('button').css({'background-color': '#f7f7f7', 'color': 'black'});
                 update_eqinfo = true;
                 maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' >" + "</td>" + "</tr>"
-                    + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
+                    + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
                     + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' >" + "</td>" + "</tr>"
                     + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
                     + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
@@ -263,7 +263,7 @@
 
                     $("#eqfirstsetting *").remove();
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN'  value = '" + clickname + "' disabled >" + "</td>" + "</tr>"
-                        + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
+                        + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
                         + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM'  value = '" + sminfo + "'>" + "</td>" + "</tr>"
                         + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
                         + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
@@ -354,7 +354,7 @@
                     $(".eqNamebtn").find('button').css({'background-color': '#f7f7f7', 'color': 'black'});
                     update_eqinfo = true;
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' value="+eqData.name+">" + "</td>" + "</tr>"
-                        + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+"</td>" + "</tr>"
+                        + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>" + "</tr>"
                         + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' value='"+eqData.synchronizationMethod+"'></td>" + "</tr>"
                         + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
                         + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" +"<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
@@ -420,7 +420,7 @@
                         $("#updateeqsetting").show();
                         $("#inserteqsetting").hide();
                         var text = "<tbody class='clickinfo'>" +
-                            "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td id='eiinfo'>"+"<select id='eiinfoSelect'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+"</td>"+ "</tr>"
+                            "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td id='eiinfo'>"+"<select id='eiinfoSelect'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>"+ "</tr>"
                             + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td id='sminfo'>" + eqData.synchronizationMethod + "</td>" + "</tr>"
                             + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td id='csinfo'>"+"<select id='csinfoSelect'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
                             + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td id='dlinfo'>" +"<select id='dlinfoSelect'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
@@ -558,7 +558,7 @@
                     $(".eqNamebtn").find('button').css({'background-color': '#f7f7f7', 'color': 'black'});
                     update_eqinfo = true;
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' value="+eqData.name+">" + "</td>" + "</tr>"
-                            + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232C</option><option>RS-422A</option><option>RS-485</option></select>"+"</td>" + "</tr>"
+                            + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>" + "</tr>"
                             + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' value='"+eqData.synchronizationMethod+"'></td>" + "</tr>"
                             + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
                             + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
