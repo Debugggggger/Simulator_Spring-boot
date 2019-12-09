@@ -53,6 +53,13 @@ public class HomeAPI {
         return modelAndView;
     }
     
+    @RequestMapping(value = "/ascii", method = RequestMethod.GET)
+    public ModelAndView asciiGET() {
+    	ModelAndView modelAndView = new ModelAndView();
+    	modelAndView.setViewName("/ascii");
+        return modelAndView;
+    }
+    
     @RequestMapping(value = "/test/heeyoung", method = RequestMethod.GET)
     public ModelAndView heeyoungGET() {
     	ModelAndView modelAndView = new ModelAndView();
