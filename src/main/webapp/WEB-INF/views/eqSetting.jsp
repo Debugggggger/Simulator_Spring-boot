@@ -127,7 +127,6 @@
                         var eq = {
                             "name": eqList[i].name,
                             "electricalInterface": eqList[i].electricalInterface,
-                            "synchronizationMethod": eqList[i].synchronizationMethod,
                             "communicationSpeed": eqList[i].communicationSpeed,
                             "dataLength": eqList[i].dataLength,
                             "stopBit": eqList[i].stopBit,
@@ -162,10 +161,9 @@
                 update_eqinfo = true;
                 maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' >" + "</td>" + "</tr>"
                     + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
-                    + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' >" + "</td>" + "</tr>"
-                    + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
-                    + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
-                    + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
+                    + "<tr class='eqCS' >" + "<td>Baud Rate</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
+                    + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
+                    + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                     + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                     + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td>" + "<input type='text'id='EC'>" + "</td>" + "</tr>"
                     + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td>" + "<input type='text'id='BC'>" + "</td>" + "  </tr>" + "</tbody>";
@@ -191,7 +189,6 @@
                     }
                     else{
                         var EI = $("#EI option:selected").text();
-                        var SM = $("#SM").val();
                         var CS = $("#CS option:selected").val();
                         var DL = $("#DL option:selected").val();
                         var SB = $("#SB option").index($("#SB option:selected"));
@@ -202,7 +199,6 @@
                         var eq = {
                             "name": eqN,
                             "electricalInterface": EI,
-                            "synchronizationMethod": SM,
                             "communicationSpeed": Number(CS),
                             "dataLength": Number(DL),
                             "stopBit": SB+1,
@@ -253,7 +249,6 @@
                     alert("수정할 장비의 이름을 선택해주세요.");
                 } else {
                     var eiinfo = $("#eiinfoSelect option:selected").text();
-                    var sminfo = $("#sminfo").text();
                     var csinfo = $("#csinfoSelect option:selected").val();
                     var dlinfo = $("#dlinfoSelect option:selected").val();
                     var sbinfo = $("#sbinfoSelect option").index($("#sbinfoSelect option:selected"));
@@ -264,10 +259,9 @@
                     $("#eqfirstsetting *").remove();
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN'  value = '" + clickname + "' disabled >" + "</td>" + "</tr>"
                         + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" +"<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+ "</td>" + "</tr>"
-                        + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM'  value = '" + sminfo + "'>" + "</td>" + "</tr>"
-                        + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
-                        + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
-                        + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
+                        + "<tr class='eqCS' >" + "<td>Baud Rate</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
+                        + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>" + "</td>" + "</tr>"
+                        + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                         + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                         + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td>" + "<input type='text'id='EC'  value = '" + ecinfo + "'>" + "</td>" + "</tr>"
                         + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td>" + "<input type='text'id='BC'  value = '" + bcinfo + "'>" + "</td>" + "  </tr>" + "</tbody>";
@@ -355,10 +349,9 @@
                     update_eqinfo = true;
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' value="+eqData.name+">" + "</td>" + "</tr>"
                         + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>" + "</tr>"
-                        + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' value='"+eqData.synchronizationMethod+"'></td>" + "</tr>"
-                        + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
-                        + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" +"<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
-                        + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>"+"</td>" + "</tr>"
+                        + "<tr class='eqCS' >" + "<td>Baud Rate</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
+                        + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td>" +"<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                        + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>"+"</td>" + "</tr>"
                         + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                         + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td>" + "<input type='text'id='EC' value='"+eqData.errorControl+"'></td>" + "</tr>"
                         + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td>" + "<input type='text'id='BC' value='"+eqData.busyControl+"'></td>" + "</tr>" + "</tbody>";
@@ -391,7 +384,6 @@
         function eqinfoCkNull() {
             var eqN = $("#eqN").val();
             var EI = $("#EI").val();
-            var SM = $("#SM").val();
             var CS = $("#CS").val();
             var DL = $("#DL").val();
             var SB = $("#SB").val();
@@ -399,7 +391,7 @@
             var EC = $("#EC").val();
             var BC = $("#BC").val();
 
-            if (eqN == "" || EI == "" || SM == "" || CS == "" || DL == "" || SB == "" || PR == "" || EC == "" || BC == "") {
+            if (eqN == "" || EI == "" || CS == "" || DL == "" || SB == "" || PR == "" || EC == "" || BC == "") {
                 alert("공백이 있습니다. 모든 값을 입력해주세요.");
                 return false;
             }
@@ -421,10 +413,9 @@
                         $("#inserteqsetting").hide();
                         var text = "<tbody class='clickinfo'>" +
                             "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td id='eiinfo'>"+"<select id='eiinfoSelect'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>"+ "</tr>"
-                            + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td id='sminfo'>" + eqData.synchronizationMethod + "</td>" + "</tr>"
-                            + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td id='csinfo'>"+"<select id='csinfoSelect'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
-                            + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td id='dlinfo'>" +"<select id='dlinfoSelect'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
-                            + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td id='sbinfo'>"+"<select id='sbinfoSelect'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
+                            + "<tr class='eqCS' >" + "<td>Baud Rate</td>" + "<td id='csinfo'>"+"<select id='csinfoSelect'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>" + "</td>" + "</tr>"
+                            + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td id='dlinfo'>" +"<select id='dlinfoSelect'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                            + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td id='sbinfo'>"+"<select id='sbinfoSelect'><option>1</option><option>1.5</option><option>2</option></select>" + "</td>" + "</tr>"
                             + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td id='prinfo'><select id='prinfoSelect'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select></td>" + " </tr>"
                             + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td id='ecinfo'>" + eqData.errorControl + "</td>" + "</tr>"
                             + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td id='bcinfo'>" + eqData.busyControl + "</td>" + "  </tr>" + "</tbody>";
@@ -559,10 +550,9 @@
                     update_eqinfo = true;
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN' value="+eqData.name+">" + "</td>" + "</tr>"
                             + "<tr class='eqEI' >" + "<td>ElectricalInterface</td>" + "<td>" + "<select id='EI'><option>RS-232</option><option>RS-422</option><option>RS-485</option></select>"+"</td>" + "</tr>"
-                            + "<tr class='eqSM' >" + "<td>SynchronizationMethod</td>" + "<td>" + "<input type='text' id='SM' value='"+eqData.synchronizationMethod+"'></td>" + "</tr>"
-                            + "<tr class='eqCS' >" + "<td>CommunicationSpeed</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
-                            + "<tr class='eqDL'>" + "<td>DataLength</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
-                            + " <tr class='eqSB' >" + " <td>StopBit</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>"+"</td>" + "</tr>"
+                            + "<tr class='eqCS' >" + "<td>Baud Rate</td>" + "<td>" + "<select id='CS'><option>300</option><option>600</option><option>1200</option><option>2400</option><option>4800</option><option>9600</option><option>19200</option><option>38400</option><option>57600</option><option>115200</option></select>"+"</td>" + "</tr>"
+                            + "<tr class='eqDL'>" + "<td>Data Bits</td>" + "<td>" + "<select id='DL'><option>5</option><option>6</option><option>7</option><option>8</option></select>"+"</td>" + "</tr>"
+                            + " <tr class='eqSB' >" + " <td>Stop Bits</td>" + "<td>" + "<select id='SB'><option>1</option><option>1.5</option><option>2</option></select>"+"</td>" + "</tr>"
                             + "<tr class='eqPR' >" + "<td>Parity</td>" + "<td>" + "<select id='PR'><option>None</option><option>Odd</option><option>Even</option><option>Mark</option><option>Spark</option></select>" + "</td>" + " </tr>"
                             + " <tr class='eqEC' >" + " <td>ErrorControl</td>" + "<td>" + "<input type='text'id='EC' value='"+eqData.errorControl+"'></td>" + "</tr>"
                             + " <tr class='eqBC' >" + " <td>BusyControl</td>" + "<td>" + "<input type='text'id='BC' value='"+eqData.busyControl+"'></td>" + "</tr>" + "</tbody>";
