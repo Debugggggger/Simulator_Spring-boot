@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EqSetting {
 	private String name;
 	private String electricalInterface;
-	private int buadRate;
+	private int baudRate;
 	private int dataBits;
 	private int stopBits;
 	private int parity;

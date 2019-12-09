@@ -45,7 +45,7 @@ public class SerialUtil {
     public SerialUtil(String port, EqSetting eqSetting) {
         super();
         this.port = port;
-        this.baudRate = eqSetting.getBuadRate();
+        this.baudRate = eqSetting.getBaudRate();
         this.dataBits = eqSetting.getDataBits();
         this.stopBits = eqSetting.getStopBits();
         this.parity = eqSetting.getParity();
