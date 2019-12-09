@@ -450,7 +450,7 @@
                         console.log(s_dt+"!!"+e_dt);
                         if(s_dt!=0||e_dt!=0){
                         	
-                        	$(" ." + eqmaincontent[i].comport + " .consoletex").append("<div> 예약 시간 : "+s_dt+" ~ "+e_dt
+                        	$(" ." + eqmaincontent[i].comport + " .consoletex").append("<div class = 'consoletex'> 예약 시간 : "+s_dt+" ~ "+e_dt
                                     + "</div>");
                         }
                         con_del("." + eqmaincontent[i].comport + " ");
