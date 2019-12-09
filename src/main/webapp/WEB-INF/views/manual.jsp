@@ -194,12 +194,8 @@ $(document).ready(function() {
             }
         });
         for (var i = 0; i < fileNameArr.length; i++) {
-            var a = document.createElement("a");
-            a.setAttribute("href", "/api/file/manualDownloader?fileName="+fileNameArr[i]);
-            a.click();
-            a.remove();
             console.log(fileNameArr[i]);
-            //manualDownload(fileNameArr[i]);
+            manualDownload(fileNameArr[i]);
     	}
    });
 
