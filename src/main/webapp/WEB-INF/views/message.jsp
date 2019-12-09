@@ -1262,8 +1262,18 @@
         if (sortDescending)
             vals.reverse();
         
-        for (var i = 0, l = lis.length; i < l; i++)
+        for (var i = 0, l = lis.length; i < l; i++){
             lis[i].outerHTML = vals[i];
+            if (vals[i].indexOf("cmp") != -1) {	// cmp 이면
+                $(".cmp").draggable({
+                    appendTo : 'body',
+                    containment : 'window',
+                    scroll : false,
+                    helper : 'clone',
+                    opacity : "0.3"
+                });
+            }       
+        }
     }
 </script>
 
