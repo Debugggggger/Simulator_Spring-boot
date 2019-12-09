@@ -127,7 +127,7 @@
                         var eq = {
                             "name": eqList[i].name,
                             "electricalInterface": eqList[i].electricalInterface,
-                            "baudrate": eqList[i].baudrate,
+                            "baudRate": eqList[i].baudRate,
                             "dataBits": eqList[i].dataBits,
                             "stopBits": eqList[i].stopBits,
                             "parity": eqList[i].parity,
@@ -186,7 +186,7 @@
                         var eq = {
                             "name": eqN,
                             "electricalInterface": EI,
-                            "baudrate": Number(BR),
+                            "baudRate": Number(BR),
                             "dataBits": Number(DB),
                             "stopBits": SB+1,
                             "parity": PR,
@@ -345,7 +345,7 @@
                     $("#PR option:eq(" + eqData.parity + ")").attr("selected", "selected");
                     $("#SB option:eq(" + (eqData.stopBits-1) + ")").attr("selected", "selected");
                     $("#DB").val(eqData.dataBits).attr("selected", "selected");
-                    $("#BR").val(eqData.baudrate).attr("selected", "selected");
+                    $("#BR").val(eqData.baudRate).attr("selected", "selected");
                     $("#EI").val(eqData.electricalInterface).attr("selected", "selected");
                     $("#FC").val(eqData.flowControl).attr("selected", "selected");
                     clickname="";
@@ -376,7 +376,7 @@
             var PR = $("#PR").val();
             var FC = $("#FC").val();
 
-            if (eqN == "" || EI == "" || BR == "" || DB == "" || SB == "" || PR == "" || FC == "" || BC == "") {
+            if (eqN == "" || EI == "" || BR == "" || DB == "" || SB == "" || PR == "" || FC == "" ) {
                 alert("공백이 있습니다. 모든 값을 입력해주세요.");
                 return false;
             }
@@ -417,7 +417,7 @@
                         $("#sbinfoSelect option:eq(" + (eqData.stopBits-1) + ")").attr("selected", "selected");
                         $('#sbinfoSelect').attr('disabled', 'true');
 
-                        $("#brinfoSelect").val(eqData.baudrate).attr("selected", "selected");
+                        $("#brinfoSelect").val(eqData.baudRate).attr("selected", "selected");
                         $('#brinfoSelect').attr('disabled', 'true');
 
                         $("#fcinfoSelect").val(eqData.flowControl).attr("selected", "selected");
@@ -545,7 +545,7 @@
                     $("#eqfirstsetting").append(maintext);
                     $("#PR option:eq(" + eqData.parity + ")").attr("selected", "selected");
                     $("#EI").val(eqData.electricalInterface).attr("selected", "selected");
-                    $("#BR").val(eqData.baudrate).attr("selected", "selected");
+                    $("#BR").val(eqData.baudRate).attr("selected", "selected");
                     $("#DB").val(eqData.dataBits).attr("selected", "selected");
                     $("#FC").val(eqData.flowControl).attr("selected", "selected");
                     $("#SB option:eq(" + (eqData.stopBits-1) + ")").attr("selected", "selected");
