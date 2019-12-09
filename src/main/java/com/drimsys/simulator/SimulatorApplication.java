@@ -1,7 +1,6 @@
 package com.drimsys.simulator;
 
 import com.drimsys.simulator.systemtray.TrayIconHandler;
-import com.sun.deploy.uitoolkit.impl.fx.ui.FXMessageDialog;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

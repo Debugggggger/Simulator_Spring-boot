@@ -52,4 +52,11 @@ public class HomeAPI {
     	modelAndView.setViewName("/manual");
         return modelAndView;
     }
+    
+    @RequestMapping(value = "/test/heeyoung", method = RequestMethod.GET)
+    public ModelAndView heeyoungGET() {
+    	ModelAndView modelAndView = new ModelAndView();
+    	modelAndView.setViewName("/test/heeyoung");
+        return modelAndView;
+    }
 }

@@ -94,14 +94,17 @@
         }
 
         .conDel {
-        position : fixed;
-            float: right;
+        	position:fixed;
+            top: 0; 
+    		z-index: 999;
+    		margin: 0;
+    		padding: 0 10px;
         }
 
         .del {
             position: absolute;
-            height: auto;
-            width: 5%;
+            height: 24px;
+            width: 24px;
             padding: 0;
             top: 0px;
             right: 0px;
@@ -446,8 +449,7 @@
                         }
                         console.log(s_dt+"!!"+e_dt);
                         if(s_dt!=0||e_dt!=0){
-                        	
-                        	$(" ." + eqmaincontent[i].comport + " .console").append("<div class = ''> 예약 시간 : "+s_dt+" ~ "+e_dt
+                        	$(" ." + eqmaincontent[i].comport + " .console").append("<div class = 'consoletex'> 예약 시간 : "+s_dt+" ~ "+e_dt
                                     + "</div>");
                         }
                         con_del("." + eqmaincontent[i].comport + " ");
@@ -960,7 +962,7 @@
                 var statistic =
                     "<label class='col-form-label' > time :</label><input type='text' class='" + com + " datepicker s_datepicker' id = 's_date' name='date'>"
                     + "<label class='col-form-label' > ~ </label><input type='text' class='" + com + " datepicker e_datepicker' id = 'e_date' name='date'>"
-                    + "<label class='col-form-label' > total run : </label>"+"<input type='text' class='runtime number' id = name='date'></br>"
+                    + "<label class='col-form-label' > total run : </label>"+"<input type='text' class='runtime number' id ='date' disabled='true'></br>"
                     + "<label class='col-form-label' > [ Scenario ] success : </label><input type='text' class='number' id = 's_scen' disabled='true'>"
                     + "<label class='col-form-label' > fail : </label><input type='text'  class='number ' id = 'f_scen' disabled='true'>"
                     + "<label class='col-form-label' > total : </label><input type='text'  class='number ' id = 't_scen' disabled='true'></br>"
@@ -1051,6 +1053,7 @@
             e.returnValue = dialogText;
             return dialogText;
         };
+        
     </script>
 
 </head>
