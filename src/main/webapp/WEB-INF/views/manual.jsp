@@ -193,10 +193,11 @@ $(document).ready(function() {
                 fileNameArr.push(td.eq(1).text());
             }
         });
-        for (var i = 0; i < fileNameArr.length; i++) {
-            console.log(fileNameArr[i]);
-            manualDownload(fileNameArr[i]);
-    	}
+       for (var i = 0; i < fileNameArr.length; i++) {
+          console.log(fileNameArr[i]);
+          manualDownload(fileNameArr[i]);
+          sleep(500);
+       }
    });
 
     function manualDownload(fileName) {
@@ -205,6 +206,10 @@ $(document).ready(function() {
        a.click();
        a.remove();
     }
+   function sleep(ms){
+      ts1 = new Date().getTime() + ms;
+      do ts2 = new Date().getTime(); while (ts2<ts1);
+   }
 });
 
 </script>
