@@ -94,14 +94,17 @@
         }
 
         .conDel {
-        position : fixed;
-            float: right;
+        	position:fixed;
+            top: 0; 
+    		z-index: 999;
+    		margin: 0;
+    		padding: 0 10px;
         }
 
         .del {
             position: absolute;
-            height: auto;
-            width: 5%;
+            height: 24px;
+            width: 24px;
             padding: 0;
             top: 0px;
             right: 0px;
@@ -447,7 +450,7 @@
                         console.log(s_dt+"!!"+e_dt);
                         if(s_dt!=0||e_dt!=0){
                         	
-                        	$(" ." + eqmaincontent[i].comport + " .console").append("<div class = ''> 예약 시간 : "+s_dt+" ~ "+e_dt
+                        	$(" ." + eqmaincontent[i].comport + " .consoletex").append("<div> 예약 시간 : "+s_dt+" ~ "+e_dt
                                     + "</div>");
                         }
                         con_del("." + eqmaincontent[i].comport + " ");
@@ -1051,6 +1054,7 @@
             e.returnValue = dialogText;
             return dialogText;
         };
+        
     </script>
 
 </head>
