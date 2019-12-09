@@ -365,7 +365,7 @@
                     $("#eqfirstsetting").append(maintext);
 
                     $("#PR option:eq(" + eqData.parity + ")").attr("selected", "selected");
-                    $("#SB option:eq(" + eqData.stopBit + ")").attr("selected", "selected");
+                    $("#SB option:eq(" + (eqData.stopBit-1) + ")").attr("selected", "selected");
                     $("#DL").val(eqData.dataLength).attr("selected", "selected");
                     $("#CS").val(eqData.communicationSpeed).attr("selected", "selected");
                     $("#EI").val(eqData.electricalInterface).attr("selected", "selected");
@@ -571,7 +571,7 @@
                     $("#EI").val(eqData.electricalInterface).attr("selected", "selected");
                     $("#CS").val(eqData.communicationSpeed).attr("selected", "selected");
                     $("#DL").val(eqData.dataLength).attr("selected", "selected");
-                    $("#SB option:eq(" + eqData.stopBit + ")").attr("selected", "selected");
+                    $("#SB option:eq(" + (eqData.stopBit-1) + ")").attr("selected", "selected");
                     clickname="";
                 });
 
