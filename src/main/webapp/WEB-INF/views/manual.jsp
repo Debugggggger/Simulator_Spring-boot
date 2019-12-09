@@ -146,7 +146,7 @@ $(document).ready(function() {
           }
 
           $.ajax({
-             url: '/api/file/uploadFiles',
+             url: '/api/file/manualUploader',
              type: 'POST',
              enctype: "multipart/form-data",
              data: formData,
@@ -180,7 +180,7 @@ $(document).ready(function() {
 
     function manualDownload(fileName) {
        var a = document.createElement("a");
-       a.setAttribute("href", "/api/file/manualDownload?fileName="+fileName);
+       a.setAttribute("href", "/api/file/manualDownloader?fileName="+fileName);
        a.click();
        a.remove();
     }

@@ -584,88 +584,50 @@
             $(".card").height(h2 * 0.80);
         }
 
-        function openTextFile() {
+        function importFiles() {
             var input = document.createElement("input");
             input.setAttribute("type", "file");
-            input.setAttribute("id", "importFile");
+            input.setAttribute("id", "importFiles");
             input.setAttribute("name", "files");
+            input.setAttribute("multiple", "multiple");
             input.setAttribute("accept", ".xml");
 
             document.getElementById("hidden-div").appendChild(input);
-            var importFile = document.getElementById("importFile");
+            var importFiles = document.getElementById("importFiles");
 
-            importFile.click();
-            importFile.onchange =function (ev) {
-                var reader = new FileReader();
-                reader.readAsText(ev.target.files[0], "utf-8");
-                reader.onload = function () {
-                    var response = ajaxFile(reader.result, "import");
-                    alert(response.message);
-                };
+            importFiles.click();
+            importFiles.onchange =function (ev) {
+                var formData = new FormData();
+                var files = importFiles.files;
 
-                importFile.remove();
-            }
-            importFile.remove();
-        }
-
-        (function checkBrowser(){
-            var agent = navigator.userAgent.toLowerCase();
-            if(agent.indexOf("chrome")!=-1){_browserState="Chrome";}
-            else if(agent.indexOf("safari")!=-1){_browserState="safari";}
-            else if(agent.indexOf("firefox")!=-1){_browserState="firefox";}
-            else if(agent.indexOf("msie")!=-1 || agent.indexOf('trident')!=-1){_browserState="IE"}
-        })();
-
-        // Extension Download reProduction Code
-        function _downloadEx(filename,contents){
-            if(_browserState.toLowerCase() ==='chrome'){
-                var element = document.createElement('a');
-                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(contents));
-                element.setAttribute('download', filename);
-                element.style.display = 'none';
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-            }
-            //not in Chrome
-            else{
-                var a = document.createElement("a"),
-                        file = new Blob([contents], { type: "text/plain;charset=utf-8" });
-
-                if (window.navigator.msSaveOrOpenBlob) // IE10+
-                    window.navigator.msSaveOrOpenBlob(file, filename);
-                else { // Others
-                    var url = URL.createObjectURL(file);
-                    a.href = url;
-                    a.download = filename;
-                    document.body.appendChild(a);
-
-                    a.click();
-                    setTimeout(function () {
-                        document.body.removeChild(a);
-                        window.URL.revokeObjectURL(url);
-                    }, 0);
+                for(var idx=0; idx<files.length; idx++) {
+                    formData.append("files", files[idx]);
                 }
-            }
+
+                $.ajax({
+                    url: '/api/file/eqSettingUploader',
+                    type: 'POST',
+                    enctype: "multipart/form-data",
+                    data: formData,
+                    contentType : false,
+                    processData : false,
+                    success: function (data) {
+                        alert(data.message);
+                    }
+                });
+
+                importFiles.remove();
+            };
+            importFiles.remove();
         }
 
-        function exportXml(name) {
-            var response = ajaxFile(name, "export");
+        function exportXml(fileName) {
+            if(!fileName) return;
 
-            switch (response.code) {
-                case 200:
-                    _downloadEx(name+".xml",response.data);
-                    break;
-                case 404:
-                    alert(response.message);
-                    break;
-                case 500:
-                    alert(response.message);
-                    break;
-                default:
-                    alert("Export Error");
-                    break;
-            }
+            var a = document.createElement("a");
+            a.setAttribute("href", "/api/file/eqSettingDownloader?fileName="+fileName);
+            a.click();
+            a.remove();
         }
     </script>
 
@@ -693,7 +655,7 @@
                                 <div class="left card-title">EqSetting</div>
                                 <div class="row" style="float: right;">
                                     <div class="btn-group" style="margin-right: 5px;">
-                                        <button type="button" class="btn btn-info" onclick="openTextFile()">Import</button>
+                                        <button type="button" class="btn btn-info" onclick="importFiles()">Import</button>
                                         <button type="button" class="btn btn-info" id="exportbtn">Export</button>
                                     </div>
                                     <button type="button" id="inserteq" class="btn btn-info" style="margin-left: auto;">New</button>
