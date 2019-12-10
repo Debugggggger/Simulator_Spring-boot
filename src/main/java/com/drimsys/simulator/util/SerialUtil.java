@@ -30,7 +30,6 @@ public class SerialUtil {
     private static Map<String, SerialUtil> serialConn = new HashMap<>();
 
     private static List<SerialUtil> serialUtilList = new ArrayList<>();
-
     public synchronized static boolean disconnectAllPort(){
         for(String port : getAllPorts()){
             SerialUtil serialUtil = serialConn.get(port);
@@ -46,9 +45,9 @@ public class SerialUtil {
     public SerialUtil(String port, EqSetting eqSetting) {
         super();
         this.port = port;
-        this.baudRate = eqSetting.getCommunicationSpeed();
-        this.dataBits = eqSetting.getDataLength();
-        this.stopBits = eqSetting.getStopBit();
+        this.baudRate = eqSetting.getBaudRate();
+        this.dataBits = eqSetting.getDataBits();
+        this.stopBits = eqSetting.getStopBits();
         this.parity = eqSetting.getParity();
     }
 
@@ -83,7 +82,6 @@ public class SerialUtil {
                 if (commPort instanceof SerialPort) {
                     this.serialPort = (SerialPort) commPort;
                     serialPort.setSerialPortParams(baudRate, dataBits, stopBits, parity);
-
                     InputStream inputStream = serialPort.getInputStream();
                     OutputStream outputStream = serialPort.getOutputStream();
                     this.reader = new SerialReader(inputStream);

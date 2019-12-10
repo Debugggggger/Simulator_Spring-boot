@@ -23,13 +23,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EqSetting {
 	private String name;
 	private String electricalInterface;
-	private String synchronizationMethod;
-	private int communicationSpeed;
-	private int dataLength;
-	private int stopBit;
+	private int baudRate;
+	private int dataBits;
+	private int stopBits;
 	private int parity;
-	private String errorControl;
-	private String busyControl;
+	private String flowControl;
 	private String targetEq;
 
 	/**

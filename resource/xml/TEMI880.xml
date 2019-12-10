@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Eq>
     <EqSetting>
-<!--        private String name;-->
-<!--        private String electricalInterface;-->
-<!--        private int buadRate;-->
-<!--        private int dataBits;-->
-<!--        private int stopBits;-->
-<!--        private int parity;-->
-<!--        private String flowControl;-->
-        <name>pump1</name>
+        <name>TEMI880</name>
         <electricalInterface>RS-232</electricalInterface>
-        <buadRate>9600</buadRate>
-        <dataBits>8</dataBits>
-        <stopBits>1</stopBits>
+        <buadRate>0</buadRate>
+        <dataBits>0</dataBits>
+        <stopBits>0</stopBits>
         <parity>0</parity>
-        <flowControl>Checksum</flowControl>
+        <flowControl>None</flowControl>
+        <targetEq></targetEq>
     </EqSetting>
     <Components>
         <Component>

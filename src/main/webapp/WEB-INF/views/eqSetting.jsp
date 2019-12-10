@@ -80,7 +80,6 @@
         var update_eqinfo = true;
         var targetEq = '';
         var _browserState = 'unknown';
-
         $(document).ready(function () {
             cardHeight();
             $("#updateeqsetting").hide();
@@ -122,7 +121,7 @@
                 if (response.code == 200) {
                     for (var i = 0; i < response.data.length; i++) {
                         eqList.push(response.data[i]);
-
+                        console.log(eqList);
                         $(".eqNamebtn").append("<button type='button' class='btn col-sm-2 btn-block btn-default eqbtn' id = '" + eqList[i].name + "' onmousedown='clicked(this.id)'>" + eqList[i].name + "</button>");
                         var eq = {
                             "name": eqList[i].name,
@@ -133,6 +132,8 @@
                             "parity": eqList[i].parity,
                             "flowControl": eqList[i].flowControl
                         }
+                        console.log("로드 시");
+                        console.log(eq);
                         setGlobalValue("Eq : " + eqList[i].name, JSON.stringify(eq), 1);
                     }
                 } else {
@@ -177,23 +178,22 @@
                     }
                     else{
                         var EI = $("#EI option:selected").text();
-                        var BR = $("#BR option:selected").val();
+                        var BR = $("#BR option:selected").text();
                         var DB = $("#DB option:selected").val();
                         var SB = $("#SB option").index($("#SB option:selected"));
                         var PR = $("#PR option").index($("#PR option:selected"));
                         var FC = $("#FC option:selected").val();
-
+                        console.log(BR);
                         var eq = {
                             "name": eqN,
                             "electricalInterface": EI,
-                            "baudRate": Number(BR),
-                            "dataBits": Number(DB),
+                            "baudRate": BR,
+                            "dataBits": DB,
                             "stopBits": SB+1,
                             "parity": PR,
                             "flowControl": FC,
                             "targetEq":targetEq
                         };
-                        console.log(eq);
                         targetEq = '';
                         if (eqinfoCkNull() != false) {
                             if (update_eqinfo == true) {
@@ -213,7 +213,7 @@
                                 var result = ajaxEqSetting("put", eqN, JSON.stringify(eq));
                                 if (result.code == 200) {
                                     setGlobalValue("Eq : " + eqN, JSON.stringify(eq), 1);
-                                    alert(clickname+"의 정보가 수정되었습니다.");
+                                    alert("수정되었습니다.");
                                 } else {
                                     console.log(result.code);
                                 }
@@ -235,12 +235,11 @@
                     alert("수정할 장비의 이름을 선택해주세요.");
                 } else {
                     var eiinfo = $("#eiinfoSelect option:selected").text();
-                    var brinfo = $("#brinfoSelect option:selected").val();
+                    var brinfo = $("#brinfoSelect option:selected").text();
                     var dbinfo = $("#dbinfoSelect option:selected").val();
                     var sbinfo = $("#sbinfoSelect option").index($("#sbinfoSelect option:selected"));
                     var prinfo = $("#prinfoSelect option").index($("#prinfoSelect option:selected"));
                     var fcinfo = $("#fcinfoSelect option:selected").val();
-                    
 
                     $("#eqfirstsetting *").remove();
                     maintext = "<tbody class='neweq'>" + "<tr class='eName' >" + "<td>EQ Name</td>" + "<td>" + "<input type='text' id='eqN'  value = '" + clickname + "' disabled >" + "</td>" + "</tr>"
@@ -257,7 +256,7 @@
                     $("#DB").val(dbinfo).attr("selected", "selected");
                     $("#SB option:eq(" + sbinfo + ")").attr("selected", "selected");
                     $("#BR").val(brinfo).attr("selected", "selected");
-                    $("#BR").val(fcinfo).attr("selected", "selected");
+                    $("#FC").val(fcinfo).attr("selected", "selected");
 
                 }
                 $("#updateeqsetting").hide();
