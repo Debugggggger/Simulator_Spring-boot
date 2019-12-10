@@ -329,6 +329,23 @@
         $(document).on("keyup", "#msgName", function(e) {
             $('#msgName').val($('#msgName').val().replace(/ /gi, ''));
         });
+        
+     	// value 입력 시 len 자동 계산
+     	$(document).on("keyup", "#value", function() {
+     	    if ($("#value").val().indexOf(",") == -1) {	// 멀티 밸류로 입력하면 len 계산 안해줌
+	     		if ($("#type").val() == "text") {
+					$("#length").val($("#value").val().length);
+	     		} else {
+					var valueText = $("#value").val().replace(/0x/gi, "");
+					if (valueText.length % 2 == 0) {
+					    $("#length").val(valueText.length / 2);
+					} else {
+					    $("#length").val(parseInt(valueText.length / 2) + 1);
+					}
+	     		}
+     	    }
+
+        });
 
         //컴포넌트 클릭/우클릭  
         $(document).on("click", ".cmp", function() {
