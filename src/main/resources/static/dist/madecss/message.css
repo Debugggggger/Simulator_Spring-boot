@@ -132,6 +132,6 @@ input:focus, textarea:focus, select:focus {
 /* body::-webkit-scrollbar { 	div 스크롤은 가능하지만 안보이게
     display: none; 
 } */
-div::-webkit-scrollbar { 	/* div 스크롤은 가능하지만 안보이게 */
+/* div::-webkit-scrollbar { 	div 스크롤은 가능하지만 안보이게
     display: none; 
-}
+} */
