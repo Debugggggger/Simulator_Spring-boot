@@ -5,14 +5,12 @@ import com.drimsys.simulator.dto.JSONResult;
 import com.drimsys.simulator.dto.MessageFrame;
 import com.drimsys.simulator.model.XmlModel;
 import com.drimsys.simulator.util.Convert;
-import com.drimsys.simulator.util.File;
 import com.drimsys.simulator.util.JSONUtil;
 import com.google.gson.Gson;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;

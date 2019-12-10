@@ -2,7 +2,6 @@ package com.drimsys.simulator.restAPI;
 
 import com.drimsys.simulator.model.XmlModel;
 import com.drimsys.simulator.util.Convert;
-import com.drimsys.simulator.util.File;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

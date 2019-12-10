@@ -18,21 +18,21 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @RequestMapping("/")
 public class HomeAPI {
-    @RequestMapping(value = {"", "/setting"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/setting/physical-interface"}, method = RequestMethod.GET)
     public ModelAndView homeGET() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("eqSetting");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/modeling/message", method = RequestMethod.GET)
+    @RequestMapping(value = "/setting/message-frame", method = RequestMethod.GET)
     public ModelAndView messageModelingGET() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("message");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/modeling/scenario", method = RequestMethod.GET)
+    @RequestMapping(value = "/setting/scenario", method = RequestMethod.GET)
     public ModelAndView scenarioGET() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("scenario");

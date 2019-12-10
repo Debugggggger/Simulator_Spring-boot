@@ -5,7 +5,6 @@ import com.drimsys.simulator.dto.JSONResult;
 import com.drimsys.simulator.dto.Scenario;
 import com.drimsys.simulator.model.XmlModel;
 import com.drimsys.simulator.util.Convert;
-import com.drimsys.simulator.util.File;
 import com.drimsys.simulator.util.JSONUtil;
 import org.springframework.web.bind.annotation.*;
 
