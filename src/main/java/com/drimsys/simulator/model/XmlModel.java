@@ -1,32 +1,26 @@
-package com.drimsys.simulator.util;
+package com.drimsys.simulator.model;
 
 import com.drimsys.simulator.dto.Component;
 import com.drimsys.simulator.dto.Eq;
 import com.drimsys.simulator.dto.xml.Components;
 import com.drimsys.simulator.dto.xml.EqXml;
+import com.drimsys.simulator.util.Convert;
+import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * 파일 처리를 위한 컨트롤러
- *
- * @author Gyeongseok Seo
- * @version 1.0
- * @since 2019-11-01 14:07
- */
+public class XmlModel{
+    @Getter
+    private final String XML_PATH = "resource/xml/";
 
-public class File {
-    public static String XML_PATH = "resource/xml/";
-    public static String MANUAL_PATH = "resource/manual/";
-
-    private static Components initComponents() {
+    private Components initComponents() {
         List<Component> init = new LinkedList<>();
         String[] descriptions = new String[] {
                 "Null char", "Start of Heading", "Start of Text", "End of Text", "End of Transmission",
@@ -49,8 +43,9 @@ public class File {
         return new Components(init);
     }
 
-    public static boolean save(String name, Eq eq, String path) {
-        java.io.File file = new java.io.File(path);
+    public boolean marshalling(String name, Eq eq) {
+        String path = XML_PATH;
+        File file = new File(path);
 
         if(!file.exists()) {
             try {
@@ -69,7 +64,7 @@ public class File {
         JAXBContext jaxbContext;
         Marshaller marshaller;
 
-        file = new java.io.File(fileName);
+        file = new File(fileName);
 
         if(!file.exists()) {
             if(eq.getEqSetting().getTargetEq().equals("")) {
@@ -91,8 +86,9 @@ public class File {
         }
     }
 
-    public static Eq load(String name, String path) {
-        java.io.File file = new java.io.File(path);
+    public Eq unmarshalling(String name) {
+        String path = XML_PATH;
+        File file = new File(path);
 
         if(!file.exists()) {
             try {
@@ -106,7 +102,7 @@ public class File {
 
         JAXBContext jaxbContext;
 
-        file = new java.io.File(path + fileName);
+        file = new File(path + fileName);
         try {
             jaxbContext = JAXBContext.newInstance(EqXml.class);
 
@@ -117,25 +113,46 @@ public class File {
         }
     }
 
-    public static List<String> getFiles(String path) {
+    public List<String> getFileNames() {
         List<String> files = new LinkedList<>();
 
-        for(java.io.File info : FileUtils.listFiles(new java.io.File(path), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
+        for(File info : FileUtils.listFiles(new File(XML_PATH), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
             files.add(info.getName().replace(".xml", ""));
         }
 
         return files;
     }
 
-    public static boolean remove(String name, String path) {
+    public boolean remove(String name) {
         String fileName = name + ".xml";
 
-        java.io.File file = new java.io.File(path + fileName);
+        File file = new File(XML_PATH + fileName);
 
         if(file.exists()) {
             return file.delete();
         }
 
         return false;
+    }
+
+    public boolean validation(String fileName) {
+        fileName = fileName.replaceAll(".xml", "");
+        Eq eq = unmarshalling(fileName);
+        remove(fileName);
+
+        // 탈출조건
+        if(eq == null) return false;
+        if(eq.getEqSetting() == null) return false;
+        if(eq.getEqSetting().getName() == null) return false;
+
+        // 장비명 중복 체크
+        for(String eqName : getFileNames()) {
+            if(eqName.equals(eq.getEqSetting().getName())) {
+                return false;
+            }
+        }
+
+        // 장비 파일 저장
+        return marshalling(eq.getEqSetting().getName(), eq);
     }
 }

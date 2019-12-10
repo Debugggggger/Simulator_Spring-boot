@@ -2,6 +2,7 @@ package com.drimsys.simulator.websocket;
 
 import com.drimsys.simulator.dto.*;
 import com.drimsys.simulator.dto.result.*;
+import com.drimsys.simulator.model.XmlModel;
 import com.drimsys.simulator.util.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,6 @@ import static com.drimsys.simulator.restAPI.PortAPI.bindPortString;
 import static com.drimsys.simulator.util.Message.*;
 
 public class ScenarioThread extends Thread{
-
     private WebSocketSession session;
     private ExeParam exeParam;
     @Setter private boolean stop;
@@ -24,7 +24,7 @@ public class ScenarioThread extends Thread{
     public ScenarioThread(WebSocketSession session, ExeParam exeParam) {
         this.session = session;
         this.exeParam = exeParam;
-        eq = File.load(exeParam.getEqName(),exeParam.getPath());
+        eq = new XmlModel().unmarshalling(exeParam.getEqName());
     }
 
     @Override

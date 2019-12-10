@@ -102,7 +102,7 @@ var _saveAs = (function(view) {
 				if (typeof file === "string") { // file is an object URL
 					get_URL().revokeObjectURL(file);
 				} else { // file is a File
-					file.remove();
+					xmlModel.remove();
 				}
 			};
 			setTimeout(revoker, arbitrary_revoke_timeout);

@@ -3,15 +3,13 @@ package com.drimsys.simulator.restAPI;
 import com.drimsys.simulator.dto.Component;
 import com.drimsys.simulator.dto.Eq;
 import com.drimsys.simulator.dto.JSONResult;
+import com.drimsys.simulator.model.XmlModel;
 import com.drimsys.simulator.util.Convert;
-import com.drimsys.simulator.util.File;
 import com.drimsys.simulator.util.JSONUtil;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
-import static com.drimsys.simulator.util.File.XML_PATH;
 import static com.drimsys.simulator.util.Message.*;
 
 /**
@@ -25,15 +23,18 @@ import static com.drimsys.simulator.util.Message.*;
 @RestController
 @RequestMapping("/api/component/{eqName}")
 public class ComponentAPI {
+    private final XmlModel xmlModel = new XmlModel();
+
     /**
      * 컴포넌트들 불러오기
      *
      * @param eqName : 장비 이름
      * @return 처리 결과
      */
+
     @RequestMapping(method = RequestMethod.GET)
     public JSONResult componentGET(@PathVariable String eqName) {
-        Eq eq = File.load(eqName, XML_PATH);
+        Eq eq = xmlModel.unmarshalling(eqName);
 
         if(eq == null) return new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -57,7 +58,7 @@ public class ComponentAPI {
     public JSONResult componentPOST(@PathVariable String eqName,
                                     @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, XML_PATH);
+        Eq eq = xmlModel.unmarshalling(eqName);
 
         if(eq == null) new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -70,7 +71,7 @@ public class ComponentAPI {
         if(eq.getComponents() == null) eq.setComponents(new HashMap<>());
         eq.getComponents().put(component.getName(), component);
 
-        return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
+        return JSONUtil.returnResult(xmlModel.marshalling(eqName, eq));
     }
 
     /**
@@ -84,7 +85,7 @@ public class ComponentAPI {
     public JSONResult componentDELETE(@PathVariable String eqName,
                                       @RequestBody String request) {
         request = Convert.decodeURL(request).replaceAll("\"", "");
-        Eq eq = File.load(eqName, XML_PATH);
+        Eq eq = xmlModel.unmarshalling(eqName);
 
         if(eq == null) new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -94,6 +95,6 @@ public class ComponentAPI {
 
         eq.getComponents().remove(request);
 
-        return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
+        return JSONUtil.returnResult(xmlModel.marshalling(eqName, eq));
     }
 }

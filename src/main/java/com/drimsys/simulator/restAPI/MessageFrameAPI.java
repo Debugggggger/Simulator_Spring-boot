@@ -3,6 +3,7 @@ package com.drimsys.simulator.restAPI;
 import com.drimsys.simulator.dto.Eq;
 import com.drimsys.simulator.dto.JSONResult;
 import com.drimsys.simulator.dto.MessageFrame;
+import com.drimsys.simulator.model.XmlModel;
 import com.drimsys.simulator.util.Convert;
 import com.drimsys.simulator.util.File;
 import com.drimsys.simulator.util.JSONUtil;
@@ -17,7 +18,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.drimsys.simulator.util.File.XML_PATH;
+
 import static com.drimsys.simulator.util.Message.*;
 
 /**
@@ -31,9 +32,11 @@ import static com.drimsys.simulator.util.Message.*;
 @RestController
 @RequestMapping("/api/messageFrame/{eqName}")
 public class MessageFrameAPI {
+    private final XmlModel xmlModel = new XmlModel();
+
     @RequestMapping(method = RequestMethod.GET)
     public JSONResult messageFrameGET(@PathVariable String eqName) {
-        Eq eq = File.load(eqName, XML_PATH);
+        Eq eq = xmlModel.unmarshalling(eqName);
 
         if(eq != null) {
             if(eq.getMessageFrames().size() != 0) {
@@ -70,7 +73,7 @@ public class MessageFrameAPI {
     public JSONResult messageFramePOSTandPUT(@PathVariable String eqName,
                                              @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, XML_PATH);
+        Eq eq = xmlModel.unmarshalling(eqName);
 
         if(eq == null) return new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -90,14 +93,14 @@ public class MessageFrameAPI {
             eq.getMessageFrames().put(messageFrame.getName(), messageFrame);
         }
 
-        return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
+        return JSONUtil.returnResult(xmlModel.marshalling(eqName, eq));
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     public JSONResult messageFrameDELETE(@PathVariable String eqName,
                                          @RequestBody String request) {
         request = Convert.decodeURL(request);
-        Eq eq = File.load(eqName, XML_PATH);
+        Eq eq = xmlModel.unmarshalling(eqName);
 
         if(eq == null) new JSONResult(404, FILE_NOT_FOUND, null);
 
@@ -119,7 +122,7 @@ public class MessageFrameAPI {
         }
 
         if(eq.getMessageFrames().remove(frameName) != null) {
-            return JSONUtil.returnResult(File.save(eqName, eq, XML_PATH));
+            return JSONUtil.returnResult(xmlModel.marshalling(eqName, eq));
         } else {
             return new JSONResult(404, FILE_NOT_FOUND, null);
         }

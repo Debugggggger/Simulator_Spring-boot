@@ -65,6 +65,18 @@ public class Convert {
         return messageFrames;
     }
 
+    public static String encodeURL(String str) {
+        try{
+            str = URLEncoder.encode(str, "UTF-8");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        str = str.replace("request=", "");
+
+        return str;
+    }
+
     public static String decodeURL(String str) {
         try{
             str = URLDecoder.decode(str, "UTF-8");
@@ -229,17 +241,5 @@ public class Convert {
             default:
                 return ""+((char)(int)tempByte);
         }
-    }
-
-    public static String encodeURL(String str) {
-        try{
-            str = URLEncoder.encode(str, "UTF-8");
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        str = str.replace("request=", "");
-
-        return str;
     }
 }
