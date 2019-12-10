@@ -840,7 +840,7 @@
 											<button class="btn btn-block btn-success btn-sm"
 												id="insertscenario">Save</button>
 											<button class="btn btn-block btn-secondary btn-sm"
-												id="cancelscenario">Cancel</button>
+												id="cancelscenario">Clear</button>
 											<button class="btn btn-block btn-danger btn-sm"
 												id="deletescenario">Delete</button>
 										</div>

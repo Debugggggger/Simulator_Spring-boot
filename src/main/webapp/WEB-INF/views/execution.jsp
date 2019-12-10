@@ -179,9 +179,9 @@
             $("#excutionstopbtn").hide();
             var testResult = ajaxPorts().data;
             if (testResult == null) { // port 연결 안됬을때
-                //alert("포트를 찾을 수 없습니다.");
-                //testResult = [ "non port"];
-                testResult = ["c1", "c2", "c3", "c4"];
+                alert("포트를 찾을 수 없습니다.");
+                testResult = [ "non port"];
+                //testResult = ["c1", "c2", "c3", "c4"];
                 document.getElementById("excutionbtn").disabled = true;
                 document.getElementById("excutionstopbtn").disabled = true;
             }
