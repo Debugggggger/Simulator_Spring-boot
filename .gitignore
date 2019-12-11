@@ -145,6 +145,7 @@ buildNumber.properties
 .DS_Store
 .idea/
 simulator.iml
-src/main/resources/META-INF/resources/WEB-INF/views
-resource/
 App.config
+src/main/resources/META-INF/resources/WEB-INF/
+resources/
+resource/
