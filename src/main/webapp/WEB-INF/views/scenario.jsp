@@ -196,17 +196,16 @@
         });
 
         //HOST, EQ별 timer 보여지기
-        $(document).off().on("click", ".radio", function() {
+        $(".radio").on('click', function() {
+        	$(".radio").css("checked","");
+            //$(this).css("checked","checked");
+            console.log($(this).attr("id"));
             if (radio_check() == "client") {
-                //$(".radio").removeClass("active");
-                $(this).addClass("active");
                 $('#HostName').css('color', 'red');
                 $('#EqName').css('color', 'gray');
                 $('.timerE').css('display', 'none');
                 $('.timerH').css('display', 'block');
             } else if (radio_check() == "eq") {
-                //$(".radio").removeClass("active");
-                $(this).addClass("active");
                 $('#HostName').css('color', 'gray');
                 $('#EqName').css('color', 'red');
                 $('.timerE').css('display', 'block');
@@ -786,15 +785,14 @@
 							<div class="card-body" id="scenariotest">
 								<div class="row">
 									<div class="col-md-5" id="ckHostEq">
-										<div class="btn-group " data-toggle="buttons">
-											<label class="btn btn-secondary"> <input type="radio"
-												class="radio" name="radio" id="Hostbtn" value="client"
-												checked="checked" />Client
-											</label> <label class="btn btn-secondary"> <input
-												type="radio" class="radio" name="radio" id="Eqbtn"
-												value="eq" />EQ
-											</label>
-										</div>
+<!-- 										<div class="btn-group" data-toggle="buttons"> -->
+<!-- 											<label class="btn btn-secondary"> -->
+											<input type="radio" class="radio" name="radio" id="Hostbtn" value="client" checked="checked" > client
+<!-- 											Client </label> -->
+<!-- 											<label class="btn btn-secondary"> -->
+											<input type="radio" class="radio" name="radio" id="Eqbtn" value="eq" > eq
+<!-- 											EQ </label> -->
+<!-- 										</div> -->
 									</div>
 									<div>
 										<div class="row">

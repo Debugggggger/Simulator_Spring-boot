@@ -12,7 +12,9 @@
 	overflow: hidden;
 	z-index: 999999;
 }
-
+#HostName{
+	color:red;
+}
 .contextmenu li {
 	border-left: 3px solid transparent;
 	transition: ease .2s;
