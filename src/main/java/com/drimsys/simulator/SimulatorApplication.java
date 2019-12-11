@@ -22,12 +22,9 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
     static {
 		String osName = System.getProperty("os.name").toLowerCase();
 		String rxtxLibPath = System.getProperty("user.dir");
-		String[] libName = new String[2];
 
 		if(osName.contains("mac")) {
-			rxtxLibPath = rxtxLibPath + "/lib/osx;.";
-			libName[0] = "librxtxParallel";
-			libName[1] = "librxtxSerial";
+			rxtxLibPath = rxtxLibPath + "/lib/osx:.";
 		} else if(osName.contains("windows")) {
 			switch(System.getProperty("sun.arch.data.model")) {
 				case "32" :
@@ -39,9 +36,6 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
 					rxtxLibPath = rxtxLibPath + "\\lib\\windows\\x64;.";
 					break;
 			}
-
-			libName[0] = "rxtxParallel";
-			libName[1] = "rxtxSerial";
 		} else {
 			showMessageDialog(osName + "은(는) 지원하지 않는 운영체제 입니다.");
 			System.exit(0);
@@ -55,9 +49,6 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
             Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
             fieldSysPath.setAccessible( true );
             fieldSysPath.set( null, null );
-
-            System.loadLibrary(libName[0]);
-            System.loadLibrary(libName[1]);
         } catch (UnsatisfiedLinkError | IllegalAccessException | NoSuchFieldException e) {
 			showMessageDialog("Native code library failed to load.\n" + e.getMessage());
 			System.exit(1);

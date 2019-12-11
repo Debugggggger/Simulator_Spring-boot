@@ -138,9 +138,11 @@ public class SerialUtil {
                     ports.add(port);
                 }
             }
-        } catch(Exception e) { e.printStackTrace();}
-
-        return ports;
+            return ports;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ports;
+        }
     }
 
     public synchronized static List<String> getAllPorts() {

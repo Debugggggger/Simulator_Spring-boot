@@ -147,5 +147,5 @@ buildNumber.properties
 simulator.iml
 App.config
 src/main/resources/META-INF/resources/WEB-INF/
-resources/
-resource/
+/resource
+/resources
