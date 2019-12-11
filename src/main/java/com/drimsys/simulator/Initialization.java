@@ -36,21 +36,21 @@ public class Initialization {
     }
 
     private void initDir() {
-        File file = new File("resource");
+        File file = new File("resources");
         if(!file.exists()) {
             try {
                 file.mkdir();
             } catch (Exception e) { }
         }
 
-        file = new File("resource/xml");
+        file = new File("resources/xml");
         if(!file.exists()) {
             try {
                 file.mkdir();
             } catch (Exception e) { }
         }
 
-        file = new File("resource/manual");
+        file = new File("resources/manual");
         if(!file.exists()) {
             try {
                 file.mkdir();

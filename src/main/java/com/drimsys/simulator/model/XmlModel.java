@@ -18,7 +18,7 @@ import java.util.List;
 
 public class XmlModel{
     @Getter
-    private final String XML_PATH = "resource/xml/";
+    private final String XML_PATH = "resources/xml/";
 
     private Components initComponents() {
         List<Component> init = new LinkedList<>();

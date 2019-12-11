@@ -13,7 +13,7 @@ import java.util.List;
 
 public class UpDownloaderService{
     @Getter
-    private final String MANUAL_PATH = "resource/manual/";
+    private final String MANUAL_PATH = "resources/manual/";
 
     public List<String> getManualFileNames() {
         List<String> files = new LinkedList<>();

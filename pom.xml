@@ -25,11 +25,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>gnu.io</groupId>
+            <groupId>org.rxtx</groupId>
             <artifactId>rxtx</artifactId>
-            <version>2.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/META-INF/resources/WEB-INF/lib/rxtx-2.2.jar</systemPath>
+            <version>2.1.7</version>
         </dependency>
 
         <!-- spring boot -->
@@ -126,12 +124,6 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
             <version>3.0.0</version>
@@ -195,16 +187,8 @@
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <forkMode>once</forkMode>
-                    <workingDirectory>target</workingDirectory>
-                    <argLine>-Djava.library.path=${basedir}/src/main/resources/META-INF/resources/WEB-INF/lib</argLine>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
+
 
 </project>

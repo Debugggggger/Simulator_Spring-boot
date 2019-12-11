@@ -11,12 +11,58 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.net.ServerSocket;
 
 @SpringBootApplication
 public class SimulatorApplication implements EmbeddedServletContainerCustomizer {
 	private static final ConfigurableApplicationContext[] app = {null};
 	private static Configuration configuration;
+
+    static {
+		String osName = System.getProperty("os.name").toLowerCase();
+		String rxtxLibPath = System.getProperty("user.dir");
+		String[] libName = new String[2];
+
+		if(osName.contains("mac")) {
+			rxtxLibPath = rxtxLibPath + "/lib/osx;.";
+			libName[0] = "librxtxParallel";
+			libName[1] = "librxtxSerial";
+		} else if(osName.contains("windows")) {
+			switch(System.getProperty("sun.arch.data.model")) {
+				case "32" :
+					System.out.println("32");
+					rxtxLibPath = rxtxLibPath + "\\lib\\windows\\x86;.";
+					break;
+				case "64" :
+					System.out.println("64");
+					rxtxLibPath = rxtxLibPath + "\\lib\\windows\\x64;.";
+					break;
+			}
+
+			libName[0] = "rxtxParallel";
+			libName[1] = "rxtxSerial";
+		} else {
+			showMessageDialog(osName + "은(는) 지원하지 않는 운영체제 입니다.");
+			System.exit(0);
+		}
+
+        try {
+            String libPath = System.getProperty("java.library.path");
+            libPath = libPath.substring(0, libPath.length()-1) + rxtxLibPath;
+
+            System.setProperty("java.library.path",libPath);
+            Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
+            fieldSysPath.setAccessible( true );
+            fieldSysPath.set( null, null );
+
+            System.loadLibrary(libName[0]);
+            System.loadLibrary(libName[1]);
+        } catch (UnsatisfiedLinkError | IllegalAccessException | NoSuchFieldException e) {
+			showMessageDialog("Native code library failed to load.\n" + e.getMessage());
+			System.exit(1);
+        }
+    }
 
 	private static void showMessageDialog(String message) {
 		JDialog dialog = new JOptionPane(message).createDialog("Simulator");
