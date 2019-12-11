@@ -33,7 +33,6 @@ public class SerialUtil {
     public synchronized static boolean disconnectAllPort(){
         for(String port : getAllPorts()){
             SerialUtil serialUtil = serialConn.get(port);
-            System.out.println("discon >> " + port);
 
             if(serialUtil != null){
                 serialUtil.disconnect();
@@ -120,7 +119,7 @@ public class SerialUtil {
                 }
             }
             return true;
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
             return false;
         }
