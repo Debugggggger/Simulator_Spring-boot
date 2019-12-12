@@ -11059,7 +11059,7 @@ html {
 .logo_symbol {
     float: left;
     padding: 18px;
-    background-image: url(../img/drim_symbol.png);
+    background-image: url(/resources/dist/img/drim_symbol.png);
     background-repeat:no-repeat;
     width: 30px;
     height: 32px;
@@ -11208,7 +11208,7 @@ html {
 	padding-top: 13px;
 }
 .logo_img {
-    background-image: url(../img/logo.png);
+    background-image: url(/resources/dist/img/logo.png);
     background-repeat: no-repeat;
     width: 100%;
     height: 40px;
@@ -18799,7 +18799,7 @@ html.maximized-card {
 .navbar-white {
 	width: 100%;
     height: 54px;
-    background-image: url(../img/header_bg.png);
+    background-image: url(/resources/dist/img/header_bg.png);
     position: fixed;
     z-index: 1;
     top: 0px;
