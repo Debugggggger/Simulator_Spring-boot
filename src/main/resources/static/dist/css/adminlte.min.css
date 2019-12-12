@@ -11205,8 +11205,7 @@ html {
     height: 53px;
 	transition: width .3s ease-in-out;
 	white-space: nowrap;
-	padding-top: 13px;
-}
+	padding-top: 13px;}
 .logo_img {
     background-image: url(/resources/dist/img/logo.png);
     background-repeat: no-repeat;
