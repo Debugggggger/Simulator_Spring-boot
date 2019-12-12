@@ -8,21 +8,26 @@
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 	<!-- Left navbar links -->
-	<ul class="navbar-nav">
-		<li class="nav-item"><a class="nav-link" data-widget="pushmenu"
-			href="#"><i class="fas fa-bars"></i></a></li>
-	</ul>
+	
+	<div class="navbar-nav">
+		<span class="nav-item">
+			<a class="nav-link" data-widget="pushmenu"href="#">
+				<i class="fas fa-bars">	</i>
+			</a>
+		</span>
+	</div>
 
 	      
 	    
 	<!-- Right navbar links -->
-	<ul class="navbar-nav ml-auto">
+	<div class="manual_box">
+		
 		<form class="form-inline ml-3">
 			<button type="button" class="btn btn-sm btn-info" id="manual">Manual</button>  
 			<select class="form-control form-control-sm" id="eqSelect">
 			</select>
 		</form>
-	</ul>
+	</div>
 </nav>
 <!-- /.navbar -->
 

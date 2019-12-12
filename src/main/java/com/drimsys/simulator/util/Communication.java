@@ -3,12 +3,14 @@ package com.drimsys.simulator.util;
 import com.drimsys.simulator.dto.Component;
 import com.drimsys.simulator.dto.MessageFrame;
 import com.drimsys.simulator.dto.result.MessageFrameResult;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
 import static com.drimsys.simulator.util.Message.*;
 
 public class Communication {
+    private static Logger logger = Logger.getLogger(Communication.class);
 
     public MessageFrameResult receive(SerialUtil serialUtil, MessageFrame messageFrame, long timeout, long waitTime, int loopIndex){
         long start = System.currentTimeMillis();
@@ -59,6 +61,7 @@ public class Communication {
             MessageFrameResult result = setResult(runtime, timeout, messageFrameName, receivedBytes, checkData, messageFrame);
             result.setCommunicationType(RECV_MESSAGE);
 
+            logger.info("[" + serialUtil.getPort() + "] <== " + receivedBytes);
             return result;
 
         }catch (Exception e){
@@ -117,6 +120,7 @@ public class Communication {
 
             result.setCommunicationType(SEND_MESSAGE);
 
+            logger.info("[" + serialUtil.getPort() + "] ==> " + writtenBytes);
             return result;
 
         } catch (Exception e) {

@@ -3,6 +3,7 @@ package com.drimsys.simulator;
 import com.drimsys.simulator.dto.Configuration;
 import com.drimsys.simulator.model.ConfigurationModel;
 import com.drimsys.simulator.systemtray.TrayIconHandler;
+import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -16,8 +17,9 @@ import java.net.ServerSocket;
 
 @SpringBootApplication
 public class SimulatorApplication implements EmbeddedServletContainerCustomizer {
-	private static final ConfigurableApplicationContext[] app = {null};
 	private static Configuration configuration;
+	private static Logger logger = Logger.getLogger(SimulatorApplication.class);
+	private static final ConfigurableApplicationContext[] app = {null};
 
     static {
 		String osName = System.getProperty("os.name").toLowerCase();
@@ -49,11 +51,46 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
             Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
             fieldSysPath.setAccessible( true );
             fieldSysPath.set( null, null );
-        } catch (UnsatisfiedLinkError | IllegalAccessException | NoSuchFieldException e) {
+        } catch (Exception e) {
 			showMessageDialog("Native code library failed to load.\n" + e.getMessage());
 			System.exit(1);
         }
     }
+
+    private static void run() {
+		configuration = new Initialization().initApplication();
+
+		TrayIconHandler.registerTrayIcon(
+				Toolkit.getDefaultToolkit().getImage("resources/icon/icon.png"),
+				"Simulator",
+				e -> {}
+		);
+
+		TrayIconHandler.addItem("Startup", e -> {
+			if(app[0] != null) {
+				int rst = showConfirmDialog("서버를 재실행 하시겠습니까?");
+				if (rst == JOptionPane.YES_OPTION) restart();
+			} else {
+				start();
+			}
+		});
+
+		TrayIconHandler.addItem("Restart", e -> restart());
+		TrayIconHandler.addItem("Shutdown", e -> stop());
+
+		TrayIconHandler.addSeparator();
+
+		TrayIconHandler.addItem("App Config", e -> editConfig());
+
+		TrayIconHandler.addSeparator();
+
+		TrayIconHandler.addItem("Exit", e -> {
+			stop();
+			System.exit(0);
+		});
+
+		start();
+	}
 
 	private static void showMessageDialog(String message) {
 		JDialog dialog = new JOptionPane(message).createDialog("Simulator");
@@ -62,7 +99,9 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
 	}
 
 	private static int showConfirmDialog(Object[] message) {
-		return JOptionPane.showConfirmDialog(null, message, "App Config", JOptionPane.OK_CANCEL_OPTION);
+		JFrame jf = new JFrame();
+		jf.setAlwaysOnTop(true);
+		return JOptionPane.showConfirmDialog(jf, message, "App Config", JOptionPane.OK_CANCEL_OPTION);
 	}
 
 	private static int showConfirmDialog(String message) {
@@ -87,6 +126,16 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
 				// string to int
 				int tomcatSock = Integer.parseInt(tomcatSockTextField.getText());
 				int appSock = Integer.parseInt(appSockTextField.getText());
+
+				if(tomcatSock == appSock) {
+					showMessageDialog("JVM 포트와 Tomcat 포트는 같을 수 없습니다.");
+				}
+
+				if( tomcatSock > 65535 || tomcatSock < 1024 || appSock > 65535 || appSock < 1024) {
+					showMessageDialog("포트 범위는 (1024 ~ 65535) 입니다.");
+					editConfig();
+					return;
+				}
 
 				// file save
 				config = new Configuration(tomcatSock, appSock);
@@ -118,6 +167,7 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
 			ServerSocket socket = new ServerSocket(8080);
 			socket.close();
 
+			logger.info("==> Tomcat Start");
 			app[0] = SpringApplication.run(SimulatorApplication.class, "");
 			showMessageDialog("서버가 실행되었습니다.\n\n" +
 							  "JVM port : " + configuration.getAppSock()  + "\n" +
@@ -128,6 +178,7 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
 	}
 
 	private static void stop() {
+		logger.info("==> Tomcat Stop");
 		if(app[0] != null) app[0].close();
 		showMessageDialog("서버가 종료되었습니다.");
 	}
@@ -138,40 +189,7 @@ public class SimulatorApplication implements EmbeddedServletContainerCustomizer 
 	}
 
 	public static void main(String[] args) {
-		configuration = new Initialization().initApplication();
-
-		TrayIconHandler.registerTrayIcon(
-				Toolkit.getDefaultToolkit().getImage("resource/icon/icon.png"),
-				"Simulator",
-				e -> {}
-		);
-
-		TrayIconHandler.addItem("Startup", e -> {
-			if(app[0] != null) {
-				int rst = showConfirmDialog("서버를 재실행 하시겠습니까?");
-				if (rst == JOptionPane.YES_OPTION) restart();
-			} else {
-				start();
-			}
-		});
-
-		TrayIconHandler.addItem("Restart", e -> restart());
-		TrayIconHandler.addItem("Shutdown", e -> stop());
-
-		TrayIconHandler.addSeparator();
-
-		TrayIconHandler.addItem("App Config", e -> {
-			editConfig();
-		});
-
-		TrayIconHandler.addSeparator();
-
-		TrayIconHandler.addItem("Exit", e -> {
-			stop();
-			System.exit(0);
-		});
-
-		start();
+		run();
 	}
 
 	@Override

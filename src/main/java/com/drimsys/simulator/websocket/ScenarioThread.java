@@ -6,6 +6,7 @@ import com.drimsys.simulator.model.XmlModel;
 import com.drimsys.simulator.util.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.log4j.Logger;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import static com.drimsys.simulator.restAPI.PortAPI.bindPortString;
 import static com.drimsys.simulator.util.Message.*;
 
 public class ScenarioThread extends Thread{
+    private static Logger logger = Logger.getLogger(ScenarioThread.class);
+
     private WebSocketSession session;
     private ExeParam exeParam;
     @Setter private boolean stop;
@@ -21,7 +24,7 @@ public class ScenarioThread extends Thread{
     private Statistics statistics = new Statistics();
     private SerialUtil serialUtil = null;
 
-    public ScenarioThread(WebSocketSession session, ExeParam exeParam) {
+    ScenarioThread(WebSocketSession session, ExeParam exeParam) {
         this.session = session;
         this.exeParam = exeParam;
         eq = new XmlModel().unmarshalling(exeParam.getEqName());
@@ -164,6 +167,7 @@ public class ScenarioThread extends Thread{
             sendStatisticsMessage(start);
         }
     }
+
     private boolean checkLoop(int loop){
         if(loop == exeParam.getLoop()){
             serialUtil.disconnect();
@@ -174,7 +178,6 @@ public class ScenarioThread extends Thread{
 
     private void sendErrorMessage(int code, String resultMessage, long start){
         TextResult textResult = getTextResult(resultMessage, System.currentTimeMillis() - start);
-
         Websocket.sendMessage(session,
                 new JSONResult(code, "Exception", textResult.toString()).toString());
     }
@@ -233,14 +236,12 @@ public class ScenarioThread extends Thread{
 
     private void sendStartMessage(){
         StartEndMessage startMessage = getStartEndMessage();
-
         Websocket.sendMessage(session,
                 new JSONResult(200, "Start", startMessage.toString()).toString());
     }
 
     private void sendEndMessage(){
         StartEndMessage endMessage = getStartEndMessage();
-
         Websocket.sendMessage(session,
                 new JSONResult(200, "End", endMessage.toString()).toString());
     }

@@ -980,7 +980,7 @@ body.swal2-no-backdrop .swal2-shown {
     .swal2-icon.swal2-question::before {
       content: '?'; }
     .swal2-icon.swal2-question.swal2-arabic-question-mark::before {
-      content: '؟'; }
+      content: '��'; }
   .swal2-icon.swal2-success {
     border-color: #28a745; }
     .swal2-icon.swal2-success [class^='swal2-success-circular-line'] {

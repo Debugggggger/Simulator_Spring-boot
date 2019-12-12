@@ -8,9 +8,12 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 	<!-- Brand Logo -->
-	<a href="/" class="brand-link"> <span
-			class="brand-text font-weight-light">Simulator</span>
-	</a>
+	<div>
+		<span class="logo_symbol"></span>
+		<a href="#" class="brand-link"> 
+			<span class="logo_img"></span>
+		</a>
+	</div>
 
 	<!-- Sidebar -->
 	<div class="sidebar">

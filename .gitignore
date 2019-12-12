@@ -146,6 +146,8 @@ buildNumber.properties
 .idea/
 simulator.iml
 App.config
-src/main/resources/META-INF/resources/WEB-INF/
+/src/main/resources/META-INF/resources/WEB-INF/
 /resource
 /resources
+/src/test
+/log
