@@ -8,12 +8,15 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.log4j.Logger;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
 public class SerialUtil {
+    private static Logger logger = Logger.getLogger(SerialUtil.class);
+
     private int parity;
     private int baudRate;
     private int dataBits;
@@ -21,7 +24,7 @@ public class SerialUtil {
 
     @Getter @Setter private boolean stop;
 
-    private String     port;
+    @Getter private String     port;
     private SerialPort serialPort;
 
     private SerialReader reader;
@@ -72,8 +75,7 @@ public class SerialUtil {
         try {
             CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(port);
             if (portIdentifier.isCurrentlyOwned()) {
-                System.out.println("Error: Port is currently in use");
-
+                logger.info("[" + port + "] : Connect failure -> Port is currently in use");
                 return false;
             } else {
                 CommPort commPort = portIdentifier.open(this.getClass().getName(), 2000);
@@ -86,16 +88,16 @@ public class SerialUtil {
                     this.reader = new SerialReader(inputStream);
                     this.writer = new SerialWriter(outputStream);
 
+                    logger.info("[" + port + "] : Connect success");
                     reader.start();
                     return true;
                 } else {
-                    System.out.println("Error: Only serial ports are handled by this example.");
-
+                    logger.info("[" + port + "] : Connect failure");
                     return false;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.debug("[" + port + "] : Connect failure -> " + e.getMessage());
             return false;
         }
     }
@@ -118,9 +120,10 @@ public class SerialUtil {
                     break;
                 }
             }
+            logger.info("[" + port + "] : Disconnect success");
             return true;
         } catch (Exception e){
-            e.printStackTrace();
+            logger.debug("[" + port + "] : Disconnect failure -> " + e.getMessage());
             return false;
         }
     }
